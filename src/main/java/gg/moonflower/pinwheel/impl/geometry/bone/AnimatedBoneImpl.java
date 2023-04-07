@@ -1,7 +1,9 @@
 package gg.moonflower.pinwheel.impl.geometry.bone;
 
 import gg.moonflower.pinwheel.api.FaceDirection;
-import gg.moonflower.pinwheel.api.geometry.*;
+import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
+import gg.moonflower.pinwheel.api.geometry.GeometryRenderer;
+import gg.moonflower.pinwheel.api.geometry.LocatorAccess;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.geometry.bone.ModelBone;
 import gg.moonflower.pinwheel.api.geometry.bone.Polygon;
@@ -93,8 +95,9 @@ public class AnimatedBoneImpl implements AnimatedBone {
         y1 = y1 + inflate;
         z1 = z1 + inflate;
 
-        if (x == x1 && y == y1 && z == z1)
+        if (x == x1 && y == y1 && z == z1) {
             return;
+        }
 
         boolean mirror = cube.overrideMirror() ? cube.mirror() : this.bone.mirror();
         if (mirror) {

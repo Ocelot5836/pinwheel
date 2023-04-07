@@ -229,11 +229,13 @@ public record GeometryModelData(Description description, Bone[] bones) {
         public static class Deserializer implements JsonDeserializer<PolyMesh> {
 
             private static PolyType parseType(JsonElement json) throws JsonParseException {
-                if (!json.isJsonPrimitive())
+                if (!json.isJsonPrimitive()) {
                     throw new JsonSyntaxException("Expected String, was " + PinwheelGsonHelper.getType(json));
+                }
                 for (PolyType polyType : PolyType.values())
-                    if (polyType.name.equalsIgnoreCase(json.getAsString()))
+                    if (polyType.name.equalsIgnoreCase(json.getAsString())) {
                         return polyType;
+                    }
                 throw new JsonSyntaxException("Unsupported poly type: " + json.getAsString() + ". Supported poly types: " + Arrays.toString(Arrays.stream(PolyType.values()).map(PolyType::getName).toArray(String[]::new)));
             }
 
@@ -247,18 +249,21 @@ public record GeometryModelData(Description description, Bone[] bones) {
 
             private static <T> T[] parsePositions(JsonObject json, String name, int size, Function<Integer, T[]> arrayGenerator, Function<JsonArray, T> generator) throws JsonParseException {
                 JsonArray positionsJson = PinwheelGsonHelper.getAsJsonArray(json, name, null);
-                if (positionsJson == null)
+                if (positionsJson == null) {
                     return arrayGenerator.apply(0);
+                }
 
                 T[] positions = arrayGenerator.apply(positionsJson.size());
                 for (int i = 0; i < positionsJson.size(); i++) {
                     JsonElement element = positionsJson.get(i);
-                    if (!element.isJsonArray())
+                    if (!element.isJsonArray()) {
                         throw new JsonSyntaxException("Expected " + name + " to be a JsonArray, was " + PinwheelGsonHelper.getType(element));
+                    }
 
                     JsonArray array = element.getAsJsonArray();
-                    if (array.size() != size)
+                    if (array.size() != size) {
                         throw new JsonParseException("Expected " + size + " " + name + " values, was " + array.size());
+                    }
 
                     positions[i] = generator.apply(array);
                 }
@@ -274,23 +279,28 @@ public record GeometryModelData(Description description, Bone[] bones) {
                 Vector3f[] normals = parsePositions(jsonObject, "normals", 3, Vector3f[]::new, j -> new Vector3f(j.get(0).getAsFloat(), j.get(1).getAsFloat(), j.get(2).getAsFloat()));
                 Vector2f[] uvs = parsePositions(jsonObject, "uvs", 2, Vector2f[]::new, j -> new Vector2f(j.get(0).getAsFloat(), j.get(1).getAsFloat()));
 
-                if (!jsonObject.has("polys"))
+                if (!jsonObject.has("polys")) {
                     throw new JsonSyntaxException("Missing polys, expected to find a JsonArray or String");
+                }
 
                 JsonElement polysJson = jsonObject.get("polys");
-                if (!polysJson.isJsonArray() && !(polysJson.isJsonPrimitive() && polysJson.getAsJsonPrimitive().isString()))
+                if (!polysJson.isJsonArray() && !(polysJson.isJsonPrimitive() && polysJson.getAsJsonPrimitive().isString())) {
                     throw new JsonSyntaxException("Expected polys to be a JsonArray or String, was " + PinwheelGsonHelper.getType(polysJson));
+                }
 
                 Polygon[] polys = polysJson.isJsonArray() ? context.deserialize(polysJson, Polygon[].class) : new Polygon[0];
                 PolyType polyType = polysJson.isJsonPrimitive() ? parseType(polysJson) : parseType(polys);
 
                 for (Polygon poly : polys) {
-                    if (poly.positions().length != polyType.getVertices())
+                    if (poly.positions().length != polyType.getVertices()) {
                         throw new JsonSyntaxException("Expected positions to be of length " + polyType.getVertices() + ". Was " + poly.positions().length);
-                    if (poly.normals().length != polyType.getVertices())
+                    }
+                    if (poly.normals().length != polyType.getVertices()) {
                         throw new JsonSyntaxException("Expected normals to be of length " + polyType.getVertices() + ". Was " + poly.normals().length);
-                    if (poly.uvs().length != polyType.getVertices())
+                    }
+                    if (poly.uvs().length != polyType.getVertices()) {
                         throw new JsonSyntaxException("Expected uvs to be of length " + polyType.getVertices() + ". Was " + poly.uvs().length);
+                    }
                 }
 
                 return new PolyMesh(normalizedUvs, positions, normals, uvs, polys, polyType);
@@ -318,19 +328,22 @@ public record GeometryModelData(Description description, Bone[] bones) {
         public static class Deserializer implements JsonDeserializer<Polygon> {
 
             private static int[] parseVertex(JsonElement element) throws JsonParseException {
-                if (!element.isJsonArray())
+                if (!element.isJsonArray()) {
                     throw new JsonSyntaxException("Expected vertex to be a JsonArray, was " + PinwheelGsonHelper.getType(element));
+                }
                 JsonArray array = element.getAsJsonArray();
-                if (array.size() != 3)
+                if (array.size() != 3) {
                     throw new JsonParseException("Expected 3 vertex values, was " + array.size());
+                }
                 return new int[]{array.get(0).getAsInt(), array.get(1).getAsInt(), array.get(2).getAsInt()};
             }
 
             @Override
             public Polygon deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                 JsonArray jsonArray = json.getAsJsonArray();
-                if (jsonArray.size() != 3 && jsonArray.size() != 4)
+                if (jsonArray.size() != 3 && jsonArray.size() != 4) {
                     throw new JsonSyntaxException("Expected 3 or 4 index values, was " + jsonArray.size());
+                }
 
                 int[] array1 = parseVertex(jsonArray.get(0));
                 int[] array2 = parseVertex(jsonArray.get(1));

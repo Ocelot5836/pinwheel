@@ -19,8 +19,9 @@ public class AnimationParserImpl {
 
     public static AnimationData[] parse(JsonElement json) throws JsonSyntaxException {
         String formatVersion = PinwheelGsonHelper.getAsString(json.getAsJsonObject(), "format_version");
-        if (!formatVersion.equals(VERSION))
+        if (!formatVersion.equals(VERSION)) {
             throw new JsonSyntaxException("Unsupported animation version: " + formatVersion);
+        }
         return GSON.fromJson(PinwheelGsonHelper.getAsJsonObject(json.getAsJsonObject(), "animations"), AnimationData[].class);
     }
 }

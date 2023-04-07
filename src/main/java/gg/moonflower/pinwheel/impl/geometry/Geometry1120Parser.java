@@ -1,9 +1,9 @@
 package gg.moonflower.pinwheel.impl.geometry;
 
 import com.google.gson.*;
+import gg.moonflower.pinwheel.api.JSONTupleParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import gg.moonflower.pinwheel.api.JSONTupleParser;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 
@@ -36,8 +36,9 @@ public final class Geometry1120Parser {
                 bones = new GeometryModelData.Bone[bonesJson.size()];
                 for (int j = 0; j < bones.length; j++) {
                     bones[j] = parseBone(PinwheelGsonHelper.convertToJsonObject(bonesJson.get(j), "bones[" + j + "]"));
-                    if (!usedNames.add(bones[j].name()))
+                    if (!usedNames.add(bones[j].name())) {
                         throw new JsonSyntaxException("Duplicate bone: " + bones[j].name());
+                    }
                 }
             } else {
                 bones = new GeometryModelData.Bone[0];
@@ -57,10 +58,12 @@ public final class Geometry1120Parser {
         int textureWidth = PinwheelGsonHelper.getAsInt(jsonObject, "texture_width", 256);
         int textureHeight = PinwheelGsonHelper.getAsInt(jsonObject, "texture_height", 256);
         boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(jsonObject, "preserve_model_pose2588", false);
-        if (textureWidth == 0)
+        if (textureWidth == 0) {
             throw new JsonSyntaxException("Texture width must not be zero");
-        if (textureHeight == 0)
+        }
+        if (textureHeight == 0) {
             throw new JsonSyntaxException("Texture height must not be zero");
+        }
         return new GeometryModelData.Description(identifier, visibleBoundsWidth, visibleBoundsHeight, new Vector3f(visibleBoundsOffset[0], visibleBoundsOffset[1], visibleBoundsOffset[2]), textureWidth, textureHeight, preserveModelPose2588);
     }
 

@@ -2,9 +2,9 @@ package gg.moonflower.pinwheel.impl.geometry;
 
 import com.google.gson.*;
 import gg.moonflower.pinwheel.api.FaceDirection;
+import gg.moonflower.pinwheel.api.JSONTupleParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import gg.moonflower.pinwheel.api.JSONTupleParser;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 
@@ -26,10 +26,12 @@ public final class Geometry110Parser {
 
         GeometryModelData data = null;
         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-            if (!entry.getKey().startsWith("geometry."))
+            if (!entry.getKey().startsWith("geometry.")) {
                 continue;
-            if (data != null)
+            }
+            if (data != null) {
                 throw new JsonSyntaxException("1.8.0 does not allow multiple geometry definitions per file.");
+            }
 
             JsonObject object = PinwheelGsonHelper.convertToJsonObject(entry.getValue(), entry.getKey());
 
@@ -44,8 +46,9 @@ public final class Geometry110Parser {
                 bones = new GeometryModelData.Bone[bonesJson.size()];
                 for (int j = 0; j < bones.length; j++) {
                     bones[j] = parseBone(PinwheelGsonHelper.convertToJsonObject(bonesJson.get(j), "bones[" + j + "]"));
-                    if (!usedNames.add(bones[j].name()))
+                    if (!usedNames.add(bones[j].name())) {
                         throw new JsonSyntaxException("Duplicate bone: " + bones[j].name());
+                    }
                 }
             } else {
                 bones = new GeometryModelData.Bone[0];
@@ -63,10 +66,12 @@ public final class Geometry110Parser {
         int textureWidth = PinwheelGsonHelper.getAsInt(json, "texturewidth", 256);
         int textureHeight = PinwheelGsonHelper.getAsInt(json, "textureheight", 256);
         boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(json, "preserve_model_pose", false);
-        if (textureWidth == 0)
+        if (textureWidth == 0) {
             throw new JsonSyntaxException("Texture width must not be zero");
-        if (textureHeight == 0)
+        }
+        if (textureHeight == 0) {
             throw new JsonSyntaxException("Texture height must not be zero");
+        }
         return new GeometryModelData.Description(identifier, visibleBoundsWidth, visibleBoundsHeight, new Vector3f(visibleBoundsOffset[0], visibleBoundsOffset[1], visibleBoundsOffset[2]), textureWidth, textureHeight, preserveModelPose2588);
     }
 
@@ -116,14 +121,16 @@ public final class Geometry110Parser {
         boolean overrideMirror = cubeJson.has("mirror");
         boolean mirror = PinwheelGsonHelper.getAsBoolean(cubeJson, "mirror", false);
         GeometryModelData.CubeUV[] uv = parseUV(cubeJson, size);
-        if (uv.length != FaceDirection.values().length)
+        if (uv.length != FaceDirection.values().length) {
             throw new JsonParseException("Expected uv to be of size " + FaceDirection.values().length + ", was " + uv.length);
+        }
         return new GeometryModelData.Cube(new Vector3f(origin[0], origin[1], origin[2]), new Vector3f(size[0], size[1], size[2]), new Vector3f(rotation[0], rotation[1], rotation[2]), new Vector3f(pivot[0], pivot[1], pivot[2]), overrideInflate, inflate, overrideMirror, mirror, uv);
     }
 
     static GeometryModelData.CubeUV[] parseUV(JsonObject cubeJson, float[] size) {
-        if (!cubeJson.has("uv"))
+        if (!cubeJson.has("uv")) {
             return new GeometryModelData.CubeUV[6];
+        }
 
         GeometryModelData.CubeUV[] uvs = new GeometryModelData.CubeUV[6];
         float[] uv = JSONTupleParser.getFloat(cubeJson, "uv", 2, () -> new float[2]);

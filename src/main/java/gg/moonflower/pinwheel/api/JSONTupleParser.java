@@ -29,16 +29,20 @@ public interface JSONTupleParser {
      * @throws JsonSyntaxException If there is improper syntax in the JSON structure
      */
     static float[] getFloat(JsonObject json, String name, int length, @Nullable Supplier<float[]> defaultValue) throws JsonSyntaxException {
-        if (!json.has(name) && defaultValue != null)
+        if (!json.has(name) && defaultValue != null) {
             return defaultValue.get();
-        if (!json.has(name))
+        }
+        if (!json.has(name)) {
             throw new JsonSyntaxException("Expected " + name + " to be a JsonArray or JsonPrimitive, was " + PinwheelGsonHelper.getType(json));
-        if (json.get(name).isJsonPrimitive() && json.getAsJsonPrimitive(name).isString())
+        }
+        if (json.get(name).isJsonPrimitive() && json.getAsJsonPrimitive(name).isString()) {
             throw new JsonSyntaxException("Molang expressions are not supported");
+        }
         if (json.get(name).isJsonArray()) {
             JsonArray vectorJson = json.getAsJsonArray(name);
-            if (vectorJson.size() != 1 && vectorJson.size() != length)
+            if (vectorJson.size() != 1 && vectorJson.size() != length) {
                 throw new JsonParseException("Expected 1 or " + length + " " + name + " values, was " + vectorJson.size());
+            }
 
             float[] values = new float[length];
             if (vectorJson.size() == 1) {
@@ -74,20 +78,24 @@ public interface JSONTupleParser {
      */
     static MolangExpression[] getExpression(JsonObject json, String name, int length, @Nullable Supplier<MolangExpression[]> defaultValue) throws JsonSyntaxException {
         try {
-            if (!json.has(name) && defaultValue != null)
+            if (!json.has(name) && defaultValue != null) {
                 return defaultValue.get();
-            if (!json.has(name))
+            }
+            if (!json.has(name)) {
                 throw new JsonSyntaxException("Expected " + name + " to be a JsonArray or JsonPrimitive, was " + PinwheelGsonHelper.getType(json));
+            }
             if (json.get(name).isJsonArray()) {
                 JsonArray vectorJson = json.getAsJsonArray(name);
-                if (vectorJson.size() != 1 && vectorJson.size() != length)
+                if (vectorJson.size() != 1 && vectorJson.size() != length) {
                     throw new JsonParseException("Expected 1 or " + length + " " + name + " values, was " + vectorJson.size());
+                }
 
                 MolangExpression[] values = new MolangExpression[length];
                 if (vectorJson.size() == 1) {
                     JsonElement vectorElement = vectorJson.get(0);
-                    if (!vectorElement.isJsonPrimitive())
+                    if (!vectorElement.isJsonPrimitive()) {
                         throw new JsonSyntaxException("Expected " + name + " to be a Float or String, was " + PinwheelGsonHelper.getType(vectorElement));
+                    }
 
                     JsonPrimitive vectorPrimitive = vectorElement.getAsJsonPrimitive();
                     if (vectorPrimitive.isString()) {
@@ -100,8 +108,9 @@ public interface JSONTupleParser {
                 } else {
                     for (int i = 0; i < values.length; i++) {
                         JsonElement vectorElement = vectorJson.get(i);
-                        if (!vectorElement.isJsonPrimitive())
+                        if (!vectorElement.isJsonPrimitive()) {
                             throw new JsonSyntaxException("Expected " + name + "[" + i + "] to be a Float or String, was " + PinwheelGsonHelper.getType(vectorElement));
+                        }
 
                         JsonPrimitive vectorPrimitive = vectorElement.getAsJsonPrimitive();
                         if (vectorPrimitive.isString()) {
@@ -146,16 +155,20 @@ public interface JSONTupleParser {
      */
     static MolangExpression getExpression(JsonObject json, String name, @Nullable Supplier<MolangExpression> defaultValue) throws JsonSyntaxException {
         try {
-            if (!json.has(name) && defaultValue != null)
+            if (!json.has(name) && defaultValue != null) {
                 return defaultValue.get();
-            if (!json.has(name))
+            }
+            if (!json.has(name)) {
                 throw new JsonSyntaxException("Expected " + name + " to be a Float or JsonPrimitive, was " + PinwheelGsonHelper.getType(json));
+            }
             if (json.get(name).isJsonPrimitive()) {
                 JsonPrimitive valuePrimitive = json.getAsJsonPrimitive(name);
-                if (valuePrimitive.isNumber())
+                if (valuePrimitive.isNumber()) {
                     return MolangExpression.of(valuePrimitive.getAsFloat());
-                if (valuePrimitive.isString())
+                }
+                if (valuePrimitive.isString()) {
                     return MolangCompiler.compile(valuePrimitive.getAsString());
+                }
             }
         } catch (MolangException e) {
             throw new JsonParseException("Failed to compile MoLang expression", e);

@@ -1,9 +1,9 @@
 package gg.moonflower.pinwheel.impl.geometry;
 
-import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.geometry.GeometryCompileException;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.api.geometry.GeometryTree;
+import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.transform.LocatorTransformation;
 import gg.moonflower.pinwheel.api.transform.MatrixStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -106,8 +106,12 @@ public class GeometryTreeImpl implements GeometryTree {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         GeometryTreeImpl that = (GeometryTreeImpl) o;
         return this.bones.equals(that.bones);
     }

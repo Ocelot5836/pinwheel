@@ -40,6 +40,9 @@ public interface GeometryTree extends LocatorAccess {
         }
     }
 
+    /**
+     * Updates the locations of all locators in the model.
+     */
     default void updateLocators() {
         MatrixStack matrixStack = MatrixStack.create();
         matrixStack.scale(-1.0F, -1.0F, 1.0F);

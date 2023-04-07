@@ -70,8 +70,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return 1.0F - a * a;
         }),
         EASE_IN_OUT_QUAD(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return 2.0F * x * x;
+            }
             float a = -2.0F * x + 2.0F;
             return 1.0F - a * a / 2.0F;
         }),
@@ -81,8 +82,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return 1.0F - a * a * a;
         }),
         EASE_IN_OUT_CUBIC(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return 4.0F * x * x * x;
+            }
             float a = -2.0F * x + 2.0F;
             return 1.0F - a * a * a / 2.0F;
         }),
@@ -92,8 +94,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return 1.0F - a * a * a * a;
         }),
         EASE_IN_OUT_QUART(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return 8.0F * x * x * x * x;
+            }
             float a = -2.0F * x + 2.0F;
             return 1.0F - a * a * a * a / 2.0F;
         }),
@@ -103,20 +106,24 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return 1.0F - a * a * a * a * a;
         }),
         EASE_IN_OUT_QUINT(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return 16.0F * x * x * x * x * x;
+            }
             float a = -2.0F * x + 2.0F;
             return 1.0F - a * a * a * a * a / 2.0F;
         }),
         EASE_IN_EXPO(x -> x == 0.0F ? 0.0F : (float) Math.pow(2.0, 10.0 * x - 10.0)),
         EASE_OUT_EXPO(x -> x == 1.0F ? 1.0F : 1.0F - (float) Math.pow(2.0, -10.0 * x)),
         EASE_IN_OUT_EXPO(x -> {
-            if (x == 0.0F)
+            if (x == 0.0F) {
                 return 0.0F;
-            if (x == 1.0F)
+            }
+            if (x == 1.0F) {
                 return 1.0F;
-            if (x < 0.5)
+            }
+            if (x < 0.5) {
                 return (float) Math.pow(2.0, 20.0 * x - 10.0) / 2.0F;
+            }
             return (2.0F - (float) Math.pow(2.0, -20.0 * x + 10.0)) / 2.0F;
         }),
         EASE_IN_CIRC(x -> 1.0F - (float) Math.sqrt(1.0F - x * x)),
@@ -125,8 +132,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return (float) Math.sqrt(1.0F - a * a);
         }),
         EASE_IN_OUT_CIRC(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return (1.0F - (float) Math.sqrt(1.0F - 4 * x * x)) / 2.0F;
+            }
             float a = -2.0F * x + 2.0F;
             return ((float) Math.sqrt(1.0F - a * a) + 1.0F) / 2.0F;
         }),
@@ -136,42 +144,53 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
             return 1.0F + 2.70158F * a * a * a + 1.70158F * a * a;
         }),
         EASE_IN_OUT_BACK(x -> {
-            if (x < 0.5)
+            if (x < 0.5) {
                 return (4.0F * x * x) * (3.5949095F * 2.0F * x - 2.5949095F) / 2.0F;
+            }
             float a = x - 2.0F;
             return ((4.0F * a * a) * (3.5949095F * (x * 2.0F - 2.0F) + 2.5949095F) + 2.0F) / 2.0F;
         }),
         EASE_IN_ELASTIC(x -> {
-            if (x == 0.0F)
+            if (x == 0.0F) {
                 return 0.0F;
-            if (x == 1.0F)
+            }
+            if (x == 1.0F) {
                 return 1.0F;
+            }
             return (float) -Math.pow(2.0, 10.0 * x - 10.0) * (float) Math.sin((x * 10.0F - 10.75F) * (2.0F * (float) Math.PI) / 3.0F);
         }),
         EASE_OUT_ELASTIC(x -> {
-            if (x == 0.0F)
+            if (x == 0.0F) {
                 return 0.0F;
-            if (x == 1.0F)
+            }
+            if (x == 1.0F) {
                 return 1.0F;
+            }
             return (float) Math.pow(2.0, -10.0 * x) * (float) Math.sin((x * 10.0F - 0.75F) * (2.0F * (float) Math.PI) / 3.0F) + 1.0F;
         }),
         EASE_IN_OUT_ELASTIC(x -> {
             float c5 = (2.0F * (float) Math.PI) / 4.5F;
-            if (x == 0.0F)
+            if (x == 0.0F) {
                 return 0.0F;
-            if (x == 1.0F)
+            }
+            if (x == 1.0F) {
                 return 1.0F;
-            if (x < 0.5)
+            }
+            if (x < 0.5) {
                 return -((float) Math.pow(2.0, 20.0 * x - 10.0) * (float) Math.sin((20.0F * x - 11.125F) * c5)) / 2.0F;
+            }
             return ((float) Math.pow(2.0, -20.0 * x + 10.0) * (float) Math.sin((20.0F * x - 11.125F) * c5)) / 2.0F + 1.0F;
         }),
         EASE_OUT_BOUNCE(x -> {
-            if (x < 0.36363636363)
+            if (x < 0.36363636363) {
                 return 7.5625F * x * x;
-            if (x < 0.72727272727)
+            }
+            if (x < 0.72727272727) {
                 return 7.5625F * (x -= 0.54545454545F) * x + 0.75F;
-            if (x < 0.90909090909)
+            }
+            if (x < 0.90909090909) {
                 return 7.5625F * (x -= 0.81818181818F) * x + 0.9375F;
+            }
             return 7.5625F * (x -= 0.95454545454F) * x + 0.984375F;
         }),
         EASE_IN_BOUNCE(x -> 1.0F - EASE_OUT_BOUNCE.function.apply(1.0F - x)),
@@ -322,22 +341,26 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
     public static class Deserializer implements JsonDeserializer<AnimationData[]> {
 
         private static Loop parseLoop(JsonElement json) {
-            if (!json.isJsonPrimitive())
+            if (!json.isJsonPrimitive()) {
                 throw new JsonSyntaxException("Expected Boolean or String, was " + PinwheelGsonHelper.getType(json));
-            if (json.getAsJsonPrimitive().isBoolean())
+            }
+            if (json.getAsJsonPrimitive().isBoolean()) {
                 return json.getAsBoolean() ? Loop.LOOP : Loop.NONE;
+            }
             if (json.getAsJsonPrimitive().isString()) {
                 for (Loop loop : Loop.values())
-                    if (loop.name().equalsIgnoreCase(json.getAsString()))
+                    if (loop.name().equalsIgnoreCase(json.getAsString())) {
                         return loop;
+                    }
                 throw new JsonSyntaxException("Unsupported loop: " + json.getAsString());
             }
             throw new JsonSyntaxException("Expected Boolean or String, was " + PinwheelGsonHelper.getType(json));
         }
 
         private static void parseEffect(BiConsumer<Float, JsonElement> effectConsumer, JsonObject json, String name) {
-            if (!json.has(name))
+            if (!json.has(name)) {
                 return;
+            }
 
             for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject(name).entrySet()) {
                 try {
@@ -349,16 +372,18 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
         }
 
         private static void parseTransform(Collection<KeyFrame> frames, JsonObject json, String name, Supplier<MolangExpression[]> defaultValue) throws JsonParseException {
-            if (!json.has(name))
+            if (!json.has(name)) {
                 return;
+            }
 
             JsonElement transformJson = json.get(name);
             if (transformJson.isJsonObject()) {
                 for (Map.Entry<String, JsonElement> entry : transformJson.getAsJsonObject().entrySet()) {
                     try {
                         float time = Float.parseFloat(entry.getKey());
-                        if (frames.stream().anyMatch(keyFrame -> keyFrame.time() == time))
+                        if (frames.stream().anyMatch(keyFrame -> keyFrame.time() == time)) {
                             throw new JsonSyntaxException("Duplicate channel time '" + time + "'");
+                        }
 
                         ChannelData data = parseChannel(transformJson.getAsJsonObject(), entry.getKey(), defaultValue);
                         frames.add(new KeyFrame(time, data.lerpMode, data.pre[0], data.pre[1], data.pre[2], data.post[0], data.post[1], data.post[2]));
@@ -373,8 +398,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
         }
 
         private static ChannelData parseChannel(JsonObject json, String name, Supplier<MolangExpression[]> defaultValue) throws JsonSyntaxException {
-            if (!json.has(name) && !json.get(name).isJsonObject() && !json.get(name).isJsonArray())
+            if (!json.has(name) && !json.get(name).isJsonObject() && !json.get(name).isJsonArray()) {
                 throw new JsonSyntaxException("Missing " + name + ", expected to find a JsonObject or JsonArray");
+            }
 
             JsonElement transformationElement = json.get(name);
             if (transformationElement.isJsonObject()) {
@@ -393,8 +419,9 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
                         }
                     }
 
-                    if (lerpMode == null)
+                    if (lerpMode == null) {
                         throw new JsonSyntaxException("Unknown Lerp Mode: " + mode);
+                    }
                 }
 
                 // Parse channels. Pre will default to post if not present
