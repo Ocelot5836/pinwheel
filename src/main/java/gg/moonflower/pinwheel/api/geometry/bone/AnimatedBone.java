@@ -52,6 +52,18 @@ public interface AnimatedBone extends ModelBone {
     void updateLocators(MatrixStack matrixStack, LocatorAccess access);
 
     /**
+     * Sets whether this bone can be seen.
+     *
+     * @param visible Whether this bone can be seen
+     */
+    void setVisible(boolean visible);
+
+    /**
+     * @return Whether this bone can be seen
+     */
+    boolean isVisible();
+
+    /**
      * Creates a new animated bone instance.
      *
      * @param bone          The bone itself

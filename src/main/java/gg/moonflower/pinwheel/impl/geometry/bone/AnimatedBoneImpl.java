@@ -42,6 +42,7 @@ public class AnimatedBoneImpl implements AnimatedBone {
     private final Matrix3f copyNormal;
     private final AnimatedBone.AnimationPose animationPose;
     private boolean copyVanilla;
+    private boolean visible;
 
     public AnimatedBoneImpl(GeometryModelData.Bone bone, float textureWidth, float textureHeight, List<AnimatedBone> children) {
         this.bone = bone;
@@ -60,6 +61,7 @@ public class AnimatedBoneImpl implements AnimatedBone {
         if (polyMesh != null) {
             this.addPolyMesh(polyMesh);
         }
+        this.visible = true;
     }
 
     private void addCube(GeometryModelData.Cube cube) {
@@ -185,7 +187,7 @@ public class AnimatedBoneImpl implements AnimatedBone {
 
     @Override
     public void render(GeometryRenderer renderer, MatrixStack matrixStack) {
-        if (!this.polygons.isEmpty() || !this.children.isEmpty()) {
+        if (this.visible && (!this.polygons.isEmpty() || !this.children.isEmpty())) {
             matrixStack.pushMatrix();
             this.translateAndRotate(matrixStack);
 
@@ -275,6 +277,19 @@ public class AnimatedBoneImpl implements AnimatedBone {
         }
 
         matrixStack.popMatrix();
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        for (AnimatedBone part : this.children) {
+            part.setVisible(visible);
+        }
+    }
+
+    @Override
+    public boolean isVisible() {
+        return this.visible;
     }
 
     @Override

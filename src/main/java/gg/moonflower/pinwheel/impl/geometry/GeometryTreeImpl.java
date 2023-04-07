@@ -71,15 +71,6 @@ public class GeometryTreeImpl implements GeometryTree {
     }
 
     @Override
-    public void updateLocators() {
-        MatrixStack matrixStack = MatrixStack.create();
-        matrixStack.scale(-1.0F, -1.0F, 1.0F);
-        for (AnimatedBone part : this.getRootBones()) {
-            part.updateLocators(matrixStack, this);
-        }
-    }
-
-    @Override
     public @Nullable AnimatedBone getBone(String name) {
         return this.bones.get(name);
     }
