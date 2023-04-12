@@ -20,21 +20,21 @@ public final class TextureTable {
     public static final Codec<TextureTable> CODEC =
             Codec.unboundedMap(Codec.STRING,
                             Codec.either(
-                                    GeometryModelTexture.CODEC.listOf().xmap(
-                                            list -> list.toArray(new GeometryModelTexture[0]),
+                                    ModelTexture.CODEC.listOf().xmap(
+                                            list -> list.toArray(new ModelTexture[0]),
                                             Arrays::asList),
-                                    GeometryModelTexture.CODEC.xmap(
-                                            texture -> new GeometryModelTexture[]{texture},
-                                            array -> array.length > 0 ? array[0] : GeometryModelTexture.MISSING)
+                                    ModelTexture.CODEC.xmap(
+                                            texture -> new ModelTexture[]{texture},
+                                            array -> array.length > 0 ? array[0] : ModelTexture.MISSING)
                             ).xmap(either -> either.left().orElseGet(() -> either.right().orElseThrow()),
                                     array -> array.length > 1 ?
                                             Either.left(array) :
                                             Either.right(array))) // Left is multiple layers, right is one layer
                     .xmap(TextureTable::new, table -> table.textures);
     public static TextureTable EMPTY = new TextureTable(new HashMap<>());
-    private static final GeometryModelTexture[] MISSING = new GeometryModelTexture[]{GeometryModelTexture.MISSING};
+    private static final ModelTexture[] MISSING = new ModelTexture[]{ModelTexture.MISSING};
 
-    private final Map<String, GeometryModelTexture[]> textures;
+    private final Map<String, ModelTexture[]> textures;
     private final Set<ModelTextureKey> textureKeys;
 
     /**
@@ -43,12 +43,12 @@ public final class TextureTable {
      * @param textures The map of texture to layers.
      *                 Layers draw the same mesh data multiple times with different textures
      */
-    public TextureTable(Map<String, GeometryModelTexture[]> textures) {
+    public TextureTable(Map<String, ModelTexture[]> textures) {
         this.textures = new HashMap<>(textures);
         this.textures.values().removeIf(layers -> layers.length == 0);
         this.textureKeys = this.textures.values().stream()
                 .flatMap(Arrays::stream)
-                .map(GeometryModelTexture::key)
+                .map(ModelTexture::key)
                 .collect(Collectors.toSet());
     }
 
@@ -66,16 +66,16 @@ public final class TextureTable {
      * Fetches a geometry model texture by the specified key.
      *
      * @param key The key of the textures to get
-     * @return The texture with that key or {@link GeometryModelTexture#MISSING} if there is no texture bound to that key
+     * @return The texture with that key or {@link ModelTexture#MISSING} if there is no texture bound to that key
      */
-    public GeometryModelTexture[] getLayerTextures(String key) {
+    public ModelTexture[] getLayerTextures(String key) {
         return this.textures.getOrDefault(key, MISSING);
     }
 
     /**
      * @return All definitions for textures
      */
-    public Map<String, GeometryModelTexture[]> getTextureDefinitions() {
+    public Map<String, ModelTexture[]> getTextureDefinitions() {
         return this.textures;
     }
 

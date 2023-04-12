@@ -1,4 +1,4 @@
-package gg.moonflower.pinwheel.api;
+package gg.moonflower.pinwheel.api.geometry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;

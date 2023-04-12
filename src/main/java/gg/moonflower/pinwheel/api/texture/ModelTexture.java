@@ -23,41 +23,41 @@ import java.util.function.Function;
  * @see Builder
  * @since 1.0.0
  */
-public record GeometryModelTexture(Type type,
-                                   TextureLayer layer,
-                                   String data,
-                                   int color,
-                                   boolean glowing,
-                                   TextureLocation location,
-                                   ModelTextureKey key) {
+public record ModelTexture(Type type,
+                           TextureLayer layer,
+                           String data,
+                           int color,
+                           boolean glowing,
+                           TextureLocation location,
+                           ModelTextureKey key) {
 
-    public static final GeometryModelTexture MISSING = GeometryModelTexture.texture().build();
+    public static final ModelTexture MISSING = ModelTexture.texture().build();
 
-    private static final Codec<GeometryModelTexture> FULL_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Codec<ModelTexture> FULL_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.xmap(Type::byName, type -> type.name().toLowerCase(Locale.ROOT))
-                    .optionalFieldOf("type", Type.LOCATION).forGetter(GeometryModelTexture::type),
+                    .optionalFieldOf("type", Type.LOCATION).forGetter(ModelTexture::type),
             Codec.STRING.xmap(TextureLayer::byName, type -> type.name().toLowerCase(Locale.ROOT))
-                    .optionalFieldOf("layer", TextureLayer.CUTOUT_CULL).forGetter(GeometryModelTexture::layer),
-            Codec.STRING.fieldOf("texture").forGetter(GeometryModelTexture::data),
+                    .optionalFieldOf("layer", TextureLayer.CUTOUT_CULL).forGetter(ModelTexture::layer),
+            Codec.STRING.fieldOf("texture").forGetter(ModelTexture::data),
             Codec.STRING.optionalFieldOf("color", "0xFFFFFF")
                     .xmap(NumberUtils::createInteger, color -> "0x" + Integer.toHexString(color & 0xFFFFFF)
                             .toUpperCase(Locale.ROOT))
-                    .forGetter(GeometryModelTexture::color),
-            Codec.BOOL.optionalFieldOf("glowing", false).forGetter(GeometryModelTexture::glowing)
-    ).apply(instance, GeometryModelTexture::new));
-    private static final Codec<GeometryModelTexture> LOCAL_CODEC = Codec.STRING.xmap(
-            location -> new GeometryModelTexture(Type.LOCATION, TextureLayer.CUTOUT_CULL, location, 0xFFFFFF, false),
-            GeometryModelTexture::data);
+                    .forGetter(ModelTexture::color),
+            Codec.BOOL.optionalFieldOf("glowing", false).forGetter(ModelTexture::glowing)
+    ).apply(instance, ModelTexture::new));
+    private static final Codec<ModelTexture> LOCAL_CODEC = Codec.STRING.xmap(
+            location -> new ModelTexture(Type.LOCATION, TextureLayer.CUTOUT_CULL, location, 0xFFFFFF, false),
+            ModelTexture::data);
 
-    public static final Codec<GeometryModelTexture> CODEC = Codec.either(LOCAL_CODEC, FULL_CODEC)
+    public static final Codec<ModelTexture> CODEC = Codec.either(LOCAL_CODEC, FULL_CODEC)
             .xmap(either -> either.map(left -> left, right -> right), Either::left);
 
     @ApiStatus.Internal
-    public GeometryModelTexture(Type type,
-                                TextureLayer layer,
-                                String data,
-                                int color,
-                                boolean glowing) {
+    public ModelTexture(Type type,
+                        TextureLayer layer,
+                        String data,
+                        int color,
+                        boolean glowing) {
         this(type,
                 layer,
                 data,
@@ -68,7 +68,7 @@ public record GeometryModelTexture(Type type,
     }
 
     @ApiStatus.Internal
-    public GeometryModelTexture {
+    public ModelTexture {
     }
 
     /**
@@ -103,12 +103,12 @@ public record GeometryModelTexture(Type type,
      * @param texture The texture to start with
      * @return A new builder for constructing a texture
      */
-    public static Builder texture(GeometryModelTexture texture) {
+    public static Builder texture(ModelTexture texture) {
         return new Builder(texture);
     }
 
     /**
-     * A type of {@link GeometryModelTexture}.
+     * A type of {@link ModelTexture}.
      *
      * @author Ocelot
      */
@@ -198,7 +198,7 @@ public record GeometryModelTexture(Type type,
             this.glowing = false;
         }
 
-        private Builder(GeometryModelTexture texture) {
+        private Builder(ModelTexture texture) {
             this.type = texture.type();
             this.layer = texture.layer();
             this.data = texture.data();
@@ -261,8 +261,8 @@ public record GeometryModelTexture(Type type,
         /**
          * @return A new texture with all the properties defined
          */
-        public GeometryModelTexture build() {
-            return new GeometryModelTexture(this.type, this.layer, this.data, this.color, this.glowing);
+        public ModelTexture build() {
+            return new ModelTexture(this.type, this.layer, this.data, this.color, this.glowing);
         }
     }
 }

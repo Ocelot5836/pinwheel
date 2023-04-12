@@ -52,6 +52,13 @@ public interface AnimatedBone extends ModelBone {
     void updateLocators(MatrixStack matrixStack, LocatorAccess access);
 
     /**
+     * Add all bones recursively to a collection.
+     *
+     * @param bones collection to be added to
+     */
+    void listBones(Collection<AnimatedBone> bones);
+
+    /**
      * Sets whether this bone can be seen.
      *
      * @param visible Whether this bone can be seen
@@ -139,7 +146,7 @@ public interface AnimatedBone extends ModelBone {
         public void add(float x, float y, float z, float rotationX, float rotationY, float rotationZ, float scaleX, float scaleY, float scaleZ) {
             this.position.add(x, y, z);
             this.rotation.add(rotationX, rotationY, rotationZ);
-            this.scale.mul(scaleX, scaleY, scaleZ);
+            this.scale.add(scaleX, scaleY, scaleZ);
         }
     }
 

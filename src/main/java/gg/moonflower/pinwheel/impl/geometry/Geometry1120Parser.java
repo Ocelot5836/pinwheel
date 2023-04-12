@@ -1,7 +1,7 @@
 package gg.moonflower.pinwheel.impl.geometry;
 
 import com.google.gson.*;
-import gg.moonflower.pinwheel.api.JSONTupleParser;
+import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -54,7 +54,7 @@ public final class Geometry1120Parser {
         String identifier = PinwheelGsonHelper.getAsString(jsonObject, "identifier");
         float visibleBoundsWidth = PinwheelGsonHelper.getAsFloat(jsonObject, "visible_bounds_width", 0);
         float visibleBoundsHeight = PinwheelGsonHelper.getAsFloat(jsonObject, "visible_bounds_height", 0);
-        float[] visibleBoundsOffset = JSONTupleParser.getFloat(jsonObject, "visible_bounds_offset", 3, () -> new float[3]);
+        float[] visibleBoundsOffset = JsonTupleParser.getFloat(jsonObject, "visible_bounds_offset", 3, () -> new float[3]);
         int textureWidth = PinwheelGsonHelper.getAsInt(jsonObject, "texture_width", 256);
         int textureHeight = PinwheelGsonHelper.getAsInt(jsonObject, "texture_height", 256);
         boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(jsonObject, "preserve_model_pose2588", false);
@@ -73,9 +73,9 @@ public final class Geometry1120Parser {
         boolean reset2588 = PinwheelGsonHelper.getAsBoolean(boneJson, "reset2588", false);
         boolean neverRender2588 = PinwheelGsonHelper.getAsBoolean(boneJson, "neverrender2588", false);
         String parent = PinwheelGsonHelper.getAsString(boneJson, "parent", null);
-        float[] pivot = JSONTupleParser.getFloat(boneJson, "pivot", 3, () -> new float[3]);
-        float[] rotation = JSONTupleParser.getFloat(boneJson, "rotation", 3, () -> new float[3]);
-        float[] bindPoseRotation2588 = JSONTupleParser.getFloat(boneJson, "bind_pose_rotation2588", 3, () -> new float[3]);
+        float[] pivot = JsonTupleParser.getFloat(boneJson, "pivot", 3, () -> new float[3]);
+        float[] rotation = JsonTupleParser.getFloat(boneJson, "rotation", 3, () -> new float[3]);
+        float[] bindPoseRotation2588 = JsonTupleParser.getFloat(boneJson, "bind_pose_rotation2588", 3, () -> new float[3]);
         boolean mirror = PinwheelGsonHelper.getAsBoolean(boneJson, "mirror", false);
         float inflate = PinwheelGsonHelper.getAsFloat(boneJson, "inflate", 0);
         boolean debug = PinwheelGsonHelper.getAsBoolean(boneJson, "debug", false);

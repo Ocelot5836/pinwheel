@@ -192,7 +192,7 @@ public class AnimatedBoneImpl implements AnimatedBone {
             this.translateAndRotate(matrixStack);
 
             if (this.copyVanilla) {
-                matrixStack.translate(-this.pivot.x() / 16.0F, -this.pivot.x() / 16.0F, -this.pivot.x() / 16.0F);
+                matrixStack.translate(-this.pivot.x() / 16.0F, -this.pivot.y() / 16.0F, -this.pivot.z() / 16.0F);
             }
 
             for (Polygon polygon : this.polygons) {
@@ -227,7 +227,7 @@ public class AnimatedBoneImpl implements AnimatedBone {
 
         matrixStack.position().mul(this.copyPosition);
         matrixStack.normal().mul(this.copyNormal);
-        matrixStack.translate((pos.x() + this.pivot.x()) / 16.0F, (-pos.y() + this.pivot.z()) / 16.0F, (pos.z() + this.pivot.z()) / 16.0F);
+        matrixStack.translate((pos.x() + this.pivot.x()) / 16.0F, (-pos.y() + this.pivot.y()) / 16.0F, (pos.z() + this.pivot.z()) / 16.0F);
         matrixStack.scale(scale.x(), scale.y(), scale.z());
         matrixStack.rotateZYX(this.rotation.z() + (float) (rot.z() * Math.PI / 180.0F), this.rotation.y() + (float) (rot.y() * Math.PI / 180.0F), this.rotation.x() + (float) (rot.x() * Math.PI / 180.0F));
         matrixStack.translate(-this.pivot.x() / 16.0F, -this.pivot.y() / 16.0F, -this.pivot.z() / 16.0F);
@@ -280,6 +280,14 @@ public class AnimatedBoneImpl implements AnimatedBone {
     }
 
     @Override
+    public void listBones(Collection<AnimatedBone> bones) {
+        bones.add(this);
+        for (AnimatedBone part : this.children) {
+            part.listBones(bones);
+        }
+    }
+
+    @Override
     public void setVisible(boolean visible) {
         this.visible = visible;
         for (AnimatedBone part : this.children) {
@@ -290,6 +298,23 @@ public class AnimatedBoneImpl implements AnimatedBone {
     @Override
     public boolean isVisible() {
         return this.visible;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AnimatedBoneImpl that = (AnimatedBoneImpl) o;
+        return bone.equals(that.bone);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.bone.hashCode();
     }
 
     @Override

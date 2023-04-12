@@ -5,7 +5,6 @@ import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.api.geometry.GeometryTree;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.transform.LocatorTransformation;
-import gg.moonflower.pinwheel.api.transform.MatrixStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,13 +60,16 @@ public class GeometryTreeImpl implements GeometryTree {
             boneBuilders.get(parent).addChild(boneBuilders.get(name));
         }
 
-        // Compile all bones
-        Map<String, AnimatedBone> compiledBones = new HashMap<>();
-        for (Map.Entry<String, AnimatedBone.Builder> entry : boneBuilders.entrySet()) {
-            compiledBones.put(entry.getKey(), entry.getValue().create(textureWidth, textureHeight));
+        // Compile and list all bones
+        Set<AnimatedBone> compiledBones = new HashSet<>();
+        List<AnimatedBone> listBones = new ArrayList<>(boneBuilders.size());
+        for (String name : rootBones) {
+            AnimatedBone bone = boneBuilders.get(name).create(textureWidth, textureHeight);
+            compiledBones.add(bone);
+            bone.listBones(listBones);
         }
-        this.bones = Collections.unmodifiableMap(compiledBones);
-        this.rootBones = rootBones.stream().map(this.bones::get).collect(Collectors.toSet());
+        this.bones = listBones.stream().collect(Collectors.toUnmodifiableMap(bone -> bone.getBone().name(), bone -> bone));
+        this.rootBones = Collections.unmodifiableSet(compiledBones);
     }
 
     @Override

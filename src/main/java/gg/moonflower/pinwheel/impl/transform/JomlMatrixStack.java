@@ -18,7 +18,7 @@ public class JomlMatrixStack implements MatrixStack {
     private boolean dirtyNormal;
 
     public JomlMatrixStack() {
-        this.positionStack = new Matrix4fStack();
+        this.positionStack = new Matrix4fStack(64);
         this.normal = new Matrix3f();
     }
 

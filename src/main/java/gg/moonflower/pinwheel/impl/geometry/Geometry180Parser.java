@@ -2,7 +2,7 @@ package gg.moonflower.pinwheel.impl.geometry;
 
 import com.google.gson.*;
 import gg.moonflower.pinwheel.api.FaceDirection;
-import gg.moonflower.pinwheel.api.JSONTupleParser;
+import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -67,7 +67,7 @@ public final class Geometry180Parser {
     private static GeometryModelData.Description parseDescription(String identifier, JsonObject json) throws JsonParseException {
         float visibleBoundsWidth = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_width", 0);
         float visibleBoundsHeight = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_height", 0);
-        float[] visibleBoundsOffset = JSONTupleParser.getFloat(json, "visible_bounds_offset", 3, () -> new float[3]);
+        float[] visibleBoundsOffset = JsonTupleParser.getFloat(json, "visible_bounds_offset", 3, () -> new float[3]);
         int textureWidth = PinwheelGsonHelper.getAsInt(json, "texturewidth", 256);
         int textureHeight = PinwheelGsonHelper.getAsInt(json, "textureheight", 256);
         boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(json, "preserve_model_pose2588", false);
@@ -85,9 +85,9 @@ public final class Geometry180Parser {
         boolean reset2588 = PinwheelGsonHelper.getAsBoolean(json, "reset", false);
         boolean neverRender2588 = PinwheelGsonHelper.getAsBoolean(json, "neverrender", false);
         String parent = PinwheelGsonHelper.getAsString(json, "parent", null);
-        float[] pivot = JSONTupleParser.getFloat(json, "pivot", 3, () -> new float[3]);
-        float[] rotation = JSONTupleParser.getFloat(json, "rotation", 3, () -> new float[3]);
-        float[] bindPoseRotation2588 = JSONTupleParser.getFloat(json, "bind_pose_rotation2588", 3, () -> new float[3]);
+        float[] pivot = JsonTupleParser.getFloat(json, "pivot", 3, () -> new float[3]);
+        float[] rotation = JsonTupleParser.getFloat(json, "rotation", 3, () -> new float[3]);
+        float[] bindPoseRotation2588 = JsonTupleParser.getFloat(json, "bind_pose_rotation2588", 3, () -> new float[3]);
         boolean mirror = PinwheelGsonHelper.getAsBoolean(json, "mirror", false);
         float inflate = PinwheelGsonHelper.getAsFloat(json, "inflate", 0);
         boolean debug = PinwheelGsonHelper.getAsBoolean(json, "debug", false);
@@ -112,10 +112,10 @@ public final class Geometry180Parser {
 
     private static GeometryModelData.Cube parseCube(JsonObject json) throws JsonParseException {
         JsonObject cubeJson = json.getAsJsonObject();
-        float[] origin = JSONTupleParser.getFloat(cubeJson, "origin", 3, () -> new float[3]);
-        float[] size = JSONTupleParser.getFloat(cubeJson, "size", 3, () -> new float[3]);
-        float[] rotation = JSONTupleParser.getFloat(cubeJson, "rotation", 3, () -> new float[3]);
-        float[] pivot = JSONTupleParser.getFloat(cubeJson, "pivot", 3, () -> new float[]{origin[0] + size[0] / 2F, origin[1] + size[1] / 2F, origin[2] + size[2] / 2F});
+        float[] origin = JsonTupleParser.getFloat(cubeJson, "origin", 3, () -> new float[3]);
+        float[] size = JsonTupleParser.getFloat(cubeJson, "size", 3, () -> new float[3]);
+        float[] rotation = JsonTupleParser.getFloat(cubeJson, "rotation", 3, () -> new float[3]);
+        float[] pivot = JsonTupleParser.getFloat(cubeJson, "pivot", 3, () -> new float[]{origin[0] + size[0] / 2F, origin[1] + size[1] / 2F, origin[2] + size[2] / 2F});
         boolean overrideInflate = cubeJson.has("inflate");
         float inflate = PinwheelGsonHelper.getAsFloat(cubeJson, "inflate", 0);
         boolean overrideMirror = cubeJson.has("mirror");
@@ -144,8 +144,8 @@ public final class Geometry180Parser {
                 }
 
                 JsonObject faceJson = PinwheelGsonHelper.getAsJsonObject(uvJson, direction.getName());
-                float[] uv = JSONTupleParser.getFloat(faceJson, "uv", 2, null);
-                float[] uvSize = JSONTupleParser.getFloat(faceJson, "uv_size", 2, () -> new float[2]);
+                float[] uv = JsonTupleParser.getFloat(faceJson, "uv", 2, null);
+                float[] uvSize = JsonTupleParser.getFloat(faceJson, "uv_size", 2, () -> new float[2]);
                 String material = PinwheelGsonHelper.getAsString(faceJson, "material_instance", "texture");
                 uvs[direction.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0], uv[1], uvSize[0], uvSize[1], material);
             }

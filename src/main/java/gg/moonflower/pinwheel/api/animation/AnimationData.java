@@ -1,7 +1,7 @@
 package gg.moonflower.pinwheel.api.animation;
 
 import com.google.gson.*;
-import gg.moonflower.pinwheel.api.JSONTupleParser;
+import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import io.github.ocelot.molangcompiler.api.MolangExpression;
 
@@ -392,7 +392,7 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
                     }
                 }
             } else {
-                MolangExpression[] values = JSONTupleParser.getExpression(json, name, 3, defaultValue);
+                MolangExpression[] values = JsonTupleParser.getExpression(json, name, 3, defaultValue);
                 frames.add(new KeyFrame(0, LerpMode.LINEAR, values[0], values[1], values[2], values[0], values[1], values[2]));
             }
         }
@@ -425,11 +425,11 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
                 }
 
                 // Parse channels. Pre will default to post if not present
-                MolangExpression[] post = JSONTupleParser.getExpression(transformationObject, "post", 3, null);
-                return new ChannelData(JSONTupleParser.getExpression(transformationObject, "pre", 3, () -> post), post, lerpMode);
+                MolangExpression[] post = JsonTupleParser.getExpression(transformationObject, "post", 3, null);
+                return new ChannelData(JsonTupleParser.getExpression(transformationObject, "pre", 3, () -> post), post, lerpMode);
             }
 
-            MolangExpression[] transformation = JSONTupleParser.getExpression(json, name, 3, defaultValue);
+            MolangExpression[] transformation = JsonTupleParser.getExpression(json, name, 3, defaultValue);
             return new ChannelData(transformation, transformation, LerpMode.LINEAR);
         }
 
@@ -444,7 +444,7 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
                 /* Parse global animation properties */
                 String animationName = animationEntry.getKey();
                 Loop loop = animationObject.has("loop") ? parseLoop(animationObject.get("loop")) : Loop.NONE; // bool
-                MolangExpression blendWeight = JSONTupleParser.getExpression(animationObject, "blend_weight", () -> MolangExpression.of(1.0F));
+                MolangExpression blendWeight = JsonTupleParser.getExpression(animationObject, "blend_weight", () -> MolangExpression.of(1.0F));
                 float animationLength = PinwheelGsonHelper.getAsFloat(animationObject, "animation_length", -1); // float
                 boolean overridePreviousAnimation = PinwheelGsonHelper.getAsBoolean(animationObject, "override_previous_animation", false); // bool
                 Set<BoneAnimation> bones = new HashSet<>();
@@ -477,7 +477,7 @@ public record AnimationData(String name, Loop loop, MolangExpression blendWeight
                 parseEffect((time, effectJson) ->
                 {
                     JsonObject soundEffectsJson = PinwheelGsonHelper.convertToJsonObject(effectJson, "sound_effects");
-                    soundEffects.add(new SoundEffect(time, PinwheelGsonHelper.getAsString(soundEffectsJson, "effect"), JSONTupleParser.getExpression(soundEffectsJson, "pitch", () -> MolangExpression.of(1.0F)), JSONTupleParser.getExpression(soundEffectsJson, "volume", () -> MolangExpression.of(1.0F)), PinwheelGsonHelper.getAsBoolean(soundEffectsJson, "loop", false)));
+                    soundEffects.add(new SoundEffect(time, PinwheelGsonHelper.getAsString(soundEffectsJson, "effect"), JsonTupleParser.getExpression(soundEffectsJson, "pitch", () -> MolangExpression.of(1.0F)), JsonTupleParser.getExpression(soundEffectsJson, "volume", () -> MolangExpression.of(1.0F)), PinwheelGsonHelper.getAsBoolean(soundEffectsJson, "loop", false)));
                 }, animationObject, "sound_effects");
                 parseEffect((time, effectJson) ->
                 {
