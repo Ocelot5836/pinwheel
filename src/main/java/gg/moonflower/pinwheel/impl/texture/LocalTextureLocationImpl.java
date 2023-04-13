@@ -1,7 +1,6 @@
 package gg.moonflower.pinwheel.impl.texture;
 
 import gg.moonflower.pinwheel.api.texture.TextureLocation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 
@@ -18,7 +17,7 @@ public record LocalTextureLocationImpl(String namespace, String path) implements
     static final Comparator<? super TextureLocation> COMPARATOR = Comparator.comparing(TextureLocation::path).thenComparing(TextureLocation::namespace);
 
     @Override
-    public int compareTo(@NotNull TextureLocation o) {
+    public int compareTo(TextureLocation o) {
         return COMPARATOR.compare(this, o);
     }
 }

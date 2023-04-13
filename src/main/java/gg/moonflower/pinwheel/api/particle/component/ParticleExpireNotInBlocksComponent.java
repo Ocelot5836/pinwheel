@@ -6,8 +6,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 
-import java.util.Objects;
-
 /**
  * Component that specifies what blocks particles will not expire in.
  *

@@ -2,7 +2,6 @@ package gg.moonflower.pinwheel.api.geometry.bone;
 
 import gg.moonflower.pinwheel.api.FaceDirection;
 import org.apache.commons.lang3.Validate;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3fc;
 import org.joml.Vector3f;
@@ -19,7 +18,7 @@ import java.util.Objects;
  * @author Ocelot
  * @since 1.0.0
  */
-public record Polygon(@Nullable String material, Vertex @NotNull [] vertices, Vector3fc @NotNull [] normals) {
+public record Polygon(@Nullable String material, Vertex[] vertices, Vector3fc[] normals) {
 
     public Polygon {
         Objects.requireNonNull(vertices, "vertices");
@@ -51,7 +50,7 @@ public record Polygon(@Nullable String material, Vertex @NotNull [] vertices, Ve
      * @param direction    The direction the quad is facing. Used for the normal
      * @return A new polygon that represents a quad
      */
-    public static @NotNull Polygon quad(@Nullable String material, Vertex @NotNull [] vertices, @NotNull Matrix3fc normalMatrix, boolean mirror, @NotNull FaceDirection direction) {
+    public static Polygon quad(@Nullable String material, Vertex[] vertices, Matrix3fc normalMatrix, boolean mirror, FaceDirection direction) {
         Validate.isTrue(vertices.length == 4, "Quads must have 4 vertices");
         if (mirror) {
             int i = vertices.length;

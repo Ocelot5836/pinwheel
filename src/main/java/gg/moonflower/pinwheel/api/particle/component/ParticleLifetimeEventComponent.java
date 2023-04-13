@@ -9,7 +9,6 @@ import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Component that listens for lifecycle events.

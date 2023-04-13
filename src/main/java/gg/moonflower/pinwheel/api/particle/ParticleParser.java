@@ -2,9 +2,9 @@ package gg.moonflower.pinwheel.api.particle;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import gg.moonflower.pinwheel.impl.particle.event.SoundParticleEvent;
 import gg.moonflower.pinwheel.impl.particle.event.SpawnParticleEvent;
-import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 
 import java.io.Reader;
 

@@ -1,6 +1,5 @@
 package gg.moonflower.pinwheel.api.geometry.bone;
 
-import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4fc;
 import org.joml.Vector4f;
 
@@ -32,7 +31,7 @@ public record Vertex(float x, float y, float z, float u, float v) {
      * @param v         The v texture coordinate
      * @return A new transformed vertex
      */
-    public static @NotNull Vertex create(@NotNull Matrix4fc transform, float x, float y, float z, float u, float v) {
+    public static Vertex create(Matrix4fc transform, float x, float y, float z, float u, float v) {
         Objects.requireNonNull(transform, "transform");
         TRANSFORM_VECTOR.set(x, y, z, 1.0F);
         TRANSFORM_VECTOR.mul(transform);

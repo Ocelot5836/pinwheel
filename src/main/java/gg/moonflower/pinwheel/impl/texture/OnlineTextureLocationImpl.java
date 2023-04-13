@@ -1,7 +1,6 @@
 package gg.moonflower.pinwheel.impl.texture;
 
 import gg.moonflower.pinwheel.api.texture.TextureLocation;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * An online implementation of {@link TextureLocation}.
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record OnlineTextureLocationImpl(String url) implements TextureLocation {
 
     @Override
-    public int compareTo(@NotNull TextureLocation o) {
+    public int compareTo(TextureLocation o) {
         return LocalTextureLocationImpl.COMPARATOR.compare(this, o);
     }
 

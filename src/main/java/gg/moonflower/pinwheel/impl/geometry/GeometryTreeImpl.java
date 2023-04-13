@@ -6,7 +6,6 @@ import gg.moonflower.pinwheel.api.geometry.GeometryTree;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.transform.LocatorTransformation;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -88,7 +87,7 @@ public class GeometryTreeImpl implements GeometryTree {
     }
 
     @Override
-    public @Nullable LocatorTransformation getLocatorTransformation(@NotNull String name) {
+    public @Nullable LocatorTransformation getLocatorTransformation(String name) {
         return this.locatorTransformations.get(name);
     }
 

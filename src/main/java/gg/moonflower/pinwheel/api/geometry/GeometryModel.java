@@ -1,7 +1,6 @@
 package gg.moonflower.pinwheel.api.geometry;
 
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
-import gg.moonflower.pinwheel.api.texture.TextureTable;
 import gg.moonflower.pinwheel.api.transform.LocatorTransformation;
 import gg.moonflower.pinwheel.api.transform.MatrixStack;
 import org.jetbrains.annotations.Nullable;
@@ -39,11 +38,6 @@ public interface GeometryModel extends GeometryTree {
 
         @Override
         public void render(GeometryRenderer renderer, MatrixStack matrixStack) {
-        }
-
-        @Override
-        public TextureTable getTextures() {
-            return TextureTable.EMPTY;
         }
 
         @Override
@@ -117,9 +111,4 @@ public interface GeometryModel extends GeometryTree {
      * @param matrixStack The matrix transformations to apply
      */
     void render(GeometryRenderer renderer, MatrixStack matrixStack);
-
-    /**
-     * @return All textures to use for the model
-     */
-    TextureTable getTextures();
 }
