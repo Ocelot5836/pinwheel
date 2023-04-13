@@ -35,10 +35,15 @@ test {
     useJUnitPlatform()
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        myJava(MavenPublication) {
+            from components.java
         }
     }
 }
