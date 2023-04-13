@@ -1,15 +1,22 @@
-plugins {
-    id 'java'
-    id 'maven-publish'
-}
+apply plugin: 'idea'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 
 group 'gg.moonflower.pinwheel'
 version '1.0.0'
 
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
 repositories {
     mavenCentral()
     maven { url "https://libraries.minecraft.net" }
-    maven { url "https://jitpack.io" }
+    maven {
+        url "https://jitpack.io"
+        content {
+            includeGroupByRegex "com\\.github.*"
+        }
+    }
 }
 
 dependencies {
