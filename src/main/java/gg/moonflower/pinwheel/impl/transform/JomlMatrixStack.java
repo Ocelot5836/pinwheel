@@ -23,38 +23,47 @@ public class JomlMatrixStack implements MatrixStack {
     }
 
     @Override
-    public void translate(float x, float y, float z) {
-        this.positionStack.translate(x, y, z);
-    }
-
-    @Override
-    public void scale(float x, float y, float z) {
-        this.positionStack.scale(x, y, z);
-        this.dirtyNormal = true;
+    public void reset() {
+        this.positionStack.clear();
+        this.normal.identity();
+        this.dirtyNormal = false;
     }
 
     @Override
     public void rotate(Quaternionfc rotation) {
-        this.positionStack.rotate(rotation);
+        MatrixStack.super.rotate(rotation);
         this.dirtyNormal = true;
     }
 
     @Override
     public void rotate(float amount, float x, float y, float z) {
-        this.positionStack.rotate(amount, x, y, z);
+        MatrixStack.super.rotate(amount, x, y, z);
         this.dirtyNormal = true;
     }
 
     @Override
     public void rotateXYZ(float x, float y, float z) {
-        this.positionStack.rotateXYZ(x, y, z);
+        MatrixStack.super.rotateXYZ(x, y, z);
         this.dirtyNormal = true;
     }
 
     @Override
     public void rotateZYX(float z, float y, float x) {
-        this.positionStack.rotateZYX(z, y, x);
+        MatrixStack.super.rotateZYX(z, y, x);
         this.dirtyNormal = true;
+    }
+
+    @Override
+    public void scale(float x, float y, float z) {
+        MatrixStack.super.scale(x, y, z);
+        this.dirtyNormal = true;
+    }
+
+    @Override
+    public void copy(MatrixStack stack) {
+        MatrixStack.super.copy(stack);
+        this.normal.set(stack.normal());
+        this.dirtyNormal = false;
     }
 
     @Override

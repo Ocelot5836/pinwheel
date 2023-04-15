@@ -1,18 +1,23 @@
 package gg.moonflower.pinwheel.api.transform;
 
-import gg.moonflower.pinwheel.api.geometry.GeometryModel;
 import gg.moonflower.pinwheel.impl.transform.JomlMatrixStack;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionfc;
 
+import java.util.Objects;
+
 /**
- * A set of matrix transformations that can be used while rendering {@link GeometryModel}.
+ * A set of matrix transformations that can be used while rendering.
  *
  * @author Ocelot
- * @since 1.0.0
  */
 public interface MatrixStack {
+
+    /**
+     * Clears all transformations.
+     */
+    void reset();
 
     /**
      * Translates the position by the specified amount.
@@ -32,14 +37,19 @@ public interface MatrixStack {
      * @param y The y amount
      * @param z The z amount
      */
-    void translate(float x, float y, float z);
+    default void translate(float x, float y, float z) {
+        this.position().translate(x, y, z);
+    }
 
     /**
      * Rotates the position and normal by the specified quaternion rotation.
      *
      * @param rotation The rotation to use
      */
-    void rotate(Quaternionfc rotation);
+    default void rotate(Quaternionfc rotation) {
+        Objects.requireNonNull(rotation, "rotation");
+        this.position().rotate(rotation);
+    }
 
     /**
      * <p>Rotates the position and normal by the specified angle about the line specified by x, y, z.</p>
@@ -50,7 +60,9 @@ public interface MatrixStack {
      * @param y      The y normal
      * @param z      The z normal
      */
-    void rotate(float amount, float x, float y, float z);
+    default void rotate(float amount, float x, float y, float z) {
+        this.position().rotate(amount, x, y, z);
+    }
 
     /**
      * Rotates about the x, y, then z planes the specified angles.
@@ -59,7 +71,9 @@ public interface MatrixStack {
      * @param y The amount to rotate in the y in radians
      * @param z The amount to rotate in the z in radians
      */
-    void rotateXYZ(float x, float y, float z);
+    default void rotateXYZ(float x, float y, float z) {
+        this.position().rotateXYZ(x, y, z);
+    }
 
     /**
      * Rotates about the z, y, then x planes the specified angles.
@@ -68,7 +82,27 @@ public interface MatrixStack {
      * @param y The amount to rotate in the y in radians
      * @param x The amount to rotate in the x in radians
      */
-    void rotateZYX(float z, float y, float x);
+    default void rotateZYX(float z, float y, float x) {
+        this.position().rotateZYX(z, y, x);
+    }
+
+    /**
+     * Scales the position and normal by the specified amount in the x, y, and z.
+     *
+     * @param xyz The scale factor
+     */
+    default void scale(double xyz) {
+        this.scale((float) xyz, (float) xyz, (float) xyz);
+    }
+
+    /**
+     * Scales the position and normal by the specified amount in the x, y, and z.
+     *
+     * @param xyz The scale factor
+     */
+    default void scale(float xyz) {
+        this.scale(xyz, xyz, xyz);
+    }
 
     /**
      * Scales the position and normal by the specified amount in the x, y, and z.
@@ -77,7 +111,30 @@ public interface MatrixStack {
      * @param y The y scale factor
      * @param z The z scale factor
      */
-    void scale(float x, float y, float z);
+    default void scale(double x, double y, double z) {
+        this.scale((float) x, (float) y, (float) z);
+    }
+
+    /**
+     * Scales the position and normal by the specified amount in the x, y, and z.
+     *
+     * @param x The x scale factor
+     * @param y The y scale factor
+     * @param z The z scale factor
+     */
+    default void scale(float x, float y, float z) {
+        this.position().scale(x, y, z);
+    }
+
+    /**
+     * Copies the current transformation of the specified stack into the current transformation of this stack.
+     *
+     * @param stack The stack to copy
+     */
+    default void copy(MatrixStack stack) {
+        Objects.requireNonNull(stack, "stack");
+        this.position().set(stack.position());
+    }
 
     /**
      * Saves the current position and normal transformation for restoring later wit {@link #popMatrix()}.
