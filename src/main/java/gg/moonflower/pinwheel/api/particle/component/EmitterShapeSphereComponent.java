@@ -28,11 +28,7 @@ public record EmitterShapeSphereComponent(MolangExpression[] offset,
 
     public static EmitterShapeSphereComponent deserialize(JsonElement json) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        MolangExpression[] offset = JsonTupleParser.getExpression(jsonObject, "offset", 3, () -> new MolangExpression[]{
-                MolangExpression.ZERO,
-                MolangExpression.ZERO,
-                MolangExpression.ZERO
-        });
+        MolangExpression[] offset = JsonTupleParser.getExpression(jsonObject, "offset", 3, () -> new MolangExpression[]{MolangExpression.ZERO, MolangExpression.ZERO, MolangExpression.ZERO});
         MolangExpression radius = JsonTupleParser.getExpression(jsonObject, "radius", () -> MolangExpression.of(1));
         boolean surfaceOnly = PinwheelGsonHelper.getAsBoolean(jsonObject, "surface_only", false);
         Either<Boolean, MolangExpression[]> dir = ParticleComponent.parseDirection(jsonObject, "direction");
@@ -81,6 +77,7 @@ public record EmitterShapeSphereComponent(MolangExpression[] offset,
             }
 
             spawner.setPositionVelocity(particle, offsetX + x, offsetY + y, offsetZ + z, dx, dy, dz);
+            spawner.spawnParticle(particle);
         }
     }
 }

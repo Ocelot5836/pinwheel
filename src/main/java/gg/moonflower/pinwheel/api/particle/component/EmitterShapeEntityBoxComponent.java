@@ -50,22 +50,22 @@ public record EmitterShapeEntityBoxComponent(boolean surfaceOnly,
                     dz = Objects.requireNonNull(this.direction[2]).safeResolve(runtime);
                 }
                 spawner.setPositionVelocity(particle, 0, 0, 0, dx, dy, dz);
+                spawner.spawnParticle(particle);
             }
             return;
         }
 
         Random random = spawner.getRandom();
-        ParticleSourceObject.Bounds bounds = entity.getBounds();
         for (int i = 0; i < count; i++) {
             ParticleInstance particle = spawner.createParticle();
             MolangEnvironment runtime = particle.getEnvironment();
 
-            double radiusX = bounds.getMaxX() / 2F;
-            double radiusY = bounds.getMaxY() / 2F;
-            double radiusZ = bounds.getMaxZ() / 2F;
-            double offsetX = bounds.getMinX() + radiusX;
-            double offsetY = bounds.getMinY() + radiusY;
-            double offsetZ = bounds.getMinZ() + radiusZ;
+            double radiusX = entity.getMaxX() / 2F;
+            double radiusY = entity.getMaxY() / 2F;
+            double radiusZ = entity.getMaxZ() / 2F;
+            double offsetX = entity.getMinX() + radiusX;
+            double offsetY = entity.getMinY() + radiusY;
+            double offsetZ = entity.getMinZ() + radiusZ;
             double rx = this.surfaceOnly ? radiusX : radiusX * random.nextFloat();
             double ry = this.surfaceOnly ? radiusY : radiusY * random.nextFloat();
             double rz = this.surfaceOnly ? radiusZ : radiusZ * random.nextFloat();
@@ -93,6 +93,7 @@ public record EmitterShapeEntityBoxComponent(boolean surfaceOnly,
             }
 
             spawner.setPositionVelocity(particle, offsetX + x, offsetY + y, offsetZ + z, dx, dy, dz);
+            spawner.spawnParticle(particle);
         }
     }
 }

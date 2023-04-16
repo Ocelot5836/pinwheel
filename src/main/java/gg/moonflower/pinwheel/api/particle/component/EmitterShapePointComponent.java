@@ -45,6 +45,7 @@ public record EmitterShapePointComponent(MolangExpression[] offset,
             float dy = this.direction[1].safeResolve(runtime);
             float dz = this.direction[2].safeResolve(runtime);
             spawner.setPositionVelocity(particle, x, y, z, dx, dy, dz);
+            spawner.spawnParticle(particle);
         }
     }
 }

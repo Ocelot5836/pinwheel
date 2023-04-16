@@ -8,45 +8,32 @@ package gg.moonflower.pinwheel.api.particle;
 public interface ParticleSourceObject {
 
     /**
-     * @return The bounds of this object
+     * @return The minimum x position of the AABB
      */
-    Bounds getBounds();
+    float getMinX();
 
     /**
-     * The bounds of a source object.
-     *
-     * @since 1.0.0
+     * @return The minimum y position of the AABB
      */
-    interface Bounds {
+    float getMinY();
 
-        /**
-         * @return The minimum x position of the AABB
-         */
-        float getMinX();
+    /**
+     * @return The minimum z position of the AABB
+     */
+    float getMinZ();
 
-        /**
-         * @return The minimum y position of the AABB
-         */
-        float getMinY();
+    /**
+     * @return The maximum x position of the AABB
+     */
+    float getMaxX();
 
-        /**
-         * @return The minimum z position of the AABB
-         */
-        float getMinZ();
+    /**
+     * @return The maximum y position of the AABB
+     */
+    float getMaxY();
 
-        /**
-         * @return The maximum x position of the AABB
-         */
-        float getMaxX();
-
-        /**
-         * @return The maximum y position of the AABB
-         */
-        float getMaxY();
-
-        /**
-         * @return The maximum z position of the AABB
-         */
-        float getMaxZ();
-    }
+    /**
+     * @return The maximum z position of the AABB
+     */
+    float getMaxZ();
 }

@@ -35,7 +35,7 @@ public record ParticleAppearanceBillboardComponent(MolangExpression[] size,
     public static ParticleAppearanceBillboardComponent deserialize(JsonElement json) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
         MolangExpression[] size = JsonTupleParser.getExpression(jsonObject, "size", 2, null);
-        FaceCameraMode cameraMode = FaceCameraMode.parseCameraMode(PinwheelGsonHelper.getAsString(jsonObject, "facing_camera_mode"));
+        FaceCameraMode cameraMode = FaceCameraMode.parseCameraMode(PinwheelGsonHelper.getAsString(jsonObject, "facing_camera_mode", FaceCameraMode.ROTATE_XYZ.getName()));
 
         float minSpeedThreshold = 0.01F;
         MolangExpression[] customDirection = null;

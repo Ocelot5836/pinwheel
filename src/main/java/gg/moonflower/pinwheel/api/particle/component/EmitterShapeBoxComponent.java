@@ -81,6 +81,7 @@ public record EmitterShapeBoxComponent(MolangExpression[] offset,
             }
 
             spawner.setPositionVelocity(particle, offsetX + x, offsetY + y, offsetZ + z, dx, dy, dz);
+            spawner.spawnParticle(particle);
         }
     }
 }

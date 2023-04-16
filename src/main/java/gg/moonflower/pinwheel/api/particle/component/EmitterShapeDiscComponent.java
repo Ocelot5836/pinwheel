@@ -148,6 +148,7 @@ public record EmitterShapeDiscComponent(MolangExpression[] normal,
             quaternion.transform(pos);
 
             spawner.setPositionVelocity(particle, offsetX + pos.x(), offsetY + pos.y(), offsetZ + pos.z(), dx, dy, dz);
+            spawner.spawnParticle(particle);
         }
     }
 }

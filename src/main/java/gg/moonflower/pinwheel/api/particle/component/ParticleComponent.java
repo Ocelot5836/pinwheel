@@ -64,8 +64,7 @@ public interface ParticleComponent {
      * @return The events parsed
      * @throws JsonSyntaxException If the file is malformed
      */
-    static String[] parseEvents(@Nullable JsonElement element,
-                                String name) throws JsonSyntaxException {
+    static String[] parseEvents(@Nullable JsonElement element, String name) throws JsonSyntaxException {
         Objects.requireNonNull(name, "name");
         if (element == null) {
             throw new JsonSyntaxException("Missing " + name + ", expected to find a JsonArray or string");
@@ -80,8 +79,7 @@ public interface ParticleComponent {
         } else if (element.isJsonPrimitive()) {
             return new String[]{PinwheelGsonHelper.convertToString(element, name)};
         }
-        throw new JsonSyntaxException(
-                "Expected " + name + " to be a JsonArray or string, was " + PinwheelGsonHelper.getType(element));
+        throw new JsonSyntaxException("Expected " + name + " to be a JsonArray or string, was " + PinwheelGsonHelper.getType(element));
     }
 
     /**

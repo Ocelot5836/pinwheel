@@ -40,6 +40,13 @@ public interface ParticleEmitterShape extends ParticleEmitterComponent {
         ParticleInstance createParticle();
 
         /**
+         * Spawns the specified particle into the world.
+         *
+         * @param particle The particle to spawn
+         */
+        void spawnParticle(ParticleInstance particle);
+
+        /**
          * @return The spawning entity instance or <code>null</code> if this spawner is no attached to anything
          */
         @Nullable ParticleSourceObject getEntity();
