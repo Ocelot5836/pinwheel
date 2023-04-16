@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 public record ParticleData(Description description,
                            Map<String, Curve> curves,
                            Map<String, ParticleEvent> events,
-                           ParticleComponent[] components) {
+                           Map<String, ParticleComponent> components) {
 
-    public static final ParticleData EMPTY = new ParticleData(new Description("empty", ModelTexture.MISSING), Collections.emptyMap(), Collections.emptyMap(), new ParticleComponent[0]);
+    public static final ParticleData EMPTY = new ParticleData(new Description("empty", ModelTexture.MISSING), Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
 
     /**
      * The different types of curves for calculating particle variables.
@@ -354,12 +354,12 @@ public record ParticleData(Description description,
                 }
             }
 
-            ParticleComponent[] components;
+            Map<String, ParticleComponent> components;
             if (jsonObject.has("components")) {
                 JsonObject eventsJson = PinwheelGsonHelper.getAsJsonObject(jsonObject, "components");
                 components = ParticleComponentParser.getInstance().deserialize(eventsJson);
             } else {
-                components = new ParticleComponent[0];
+                components = Collections.emptyMap();
             }
 
             return new ParticleData(description, curves.build(), events.build(), components);

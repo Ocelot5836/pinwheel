@@ -8,15 +8,15 @@ import com.google.gson.JsonSyntaxException;
 import gg.moonflower.pinwheel.api.particle.ParticleComponentParser;
 import gg.moonflower.pinwheel.api.particle.component.*;
 import org.jetbrains.annotations.ApiStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 @ApiStatus.Internal
 public final class ParticleComponentParserImpl {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleComponentParser.class);
     private static final ParticleComponentParser INSTANCE = ServiceLoader.load(ParticleComponentParser.class).findFirst().orElseGet(() -> ParticleComponentParserImpl::deserialize);
     private static final Map<String, ParticleComponent.Factory> FACTORIES;
 
@@ -67,21 +67,22 @@ public final class ParticleComponentParserImpl {
         builder.put("minecraft:" + name, factory);
     }
 
-    private static ParticleComponent[] deserialize(JsonObject json) throws JsonParseException {
-        List<ParticleComponent> components = new ArrayList<>(json.size());
+    private static Map<String, ParticleComponent> deserialize(JsonObject json) throws JsonParseException {
+        Map<String, ParticleComponent> components = new HashMap<>(json.size());
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
             try {
                 String id = entry.getKey();
                 if (!FACTORIES.containsKey(id)) {
-                    throw new JsonSyntaxException("Unknown particle component: " + entry.getKey());
+                    LOGGER.error("Unknown particle component: " + entry.getKey());
+                    continue;
                 }
 
-                components.add(FACTORIES.get(id).create(entry.getValue()));
+                components.put(id, FACTORIES.get(id).create(entry.getValue()));
             } catch (Exception e) {
                 throw new JsonSyntaxException("Invalid particle component: " + entry.getKey(), e);
             }
         }
-        return components.toArray(ParticleComponent[]::new);
+        return Collections.unmodifiableMap(components);
     }
 
     public static ParticleComponentParser getInstance() {

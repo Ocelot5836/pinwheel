@@ -5,6 +5,8 @@ import com.google.gson.JsonParseException;
 import gg.moonflower.pinwheel.api.particle.component.ParticleComponent;
 import gg.moonflower.pinwheel.impl.particle.ParticleComponentParserImpl;
 
+import java.util.Map;
+
 /**
  * <p>Deserializes particle components from JSON.</p>
  * <p>The way components are parsed can be customized using the {@linkplain java.util.ServiceLoader Service Loader API},
@@ -30,5 +32,5 @@ public interface ParticleComponentParser {
      * @return All components deserialized
      * @throws JsonParseException If any errors occurs deserializing components
      */
-    ParticleComponent[] deserialize(JsonObject json) throws JsonParseException;
+    Map<String, ParticleComponent> deserialize(JsonObject json) throws JsonParseException;
 }

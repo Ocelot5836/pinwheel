@@ -13,12 +13,12 @@ public interface ParticleInstance {
     /**
      * @return The time in seconds this particle has been alive for
      */
-    float getAge();
+    float getParticleAge();
 
     /**
      * @return The maximum amount of time in seconds this particle can live
      */
-    float getLifetime();
+    float getParticleLifetime();
 
     /**
      * @return This particle's MoLang execution environment

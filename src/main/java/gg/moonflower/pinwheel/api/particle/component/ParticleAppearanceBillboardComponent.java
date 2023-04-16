@@ -186,8 +186,8 @@ public record ParticleAppearanceBillboardComponent(MolangExpression[] size,
 
         @Override
         public void setUV(ParticleInstance particle, MolangEnvironment environment, SingleQuadRenderProperties properties) {
-            float age = particle.getAge();
-            float life = particle.getLifetime();
+            float age = particle.getParticleAge();
+            float life = particle.getParticleLifetime();
             properties.setUV(environment, this.textureWidth, this.textureHeight, this.flipbook, age, life);
         }
     }
