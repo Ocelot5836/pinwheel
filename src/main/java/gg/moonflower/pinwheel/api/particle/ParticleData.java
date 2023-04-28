@@ -9,6 +9,7 @@ import gg.moonflower.pinwheel.api.particle.component.ParticleComponent;
 import gg.moonflower.pinwheel.api.texture.ModelTexture;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import io.github.ocelot.molangcompiler.api.MolangExpression;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -29,7 +30,7 @@ public record ParticleData(Description description,
                            Map<String, ParticleEvent> events,
                            Map<String, ParticleComponent> components) {
 
-    public static final ParticleData EMPTY = new ParticleData(new Description("empty", ModelTexture.MISSING), Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
+    public static final ParticleData EMPTY = new ParticleData(new Description("empty", ModelTexture.MISSING, null), Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
 
     /**
      * The different types of curves for calculating particle variables.
@@ -46,15 +47,11 @@ public record ParticleData(Description description,
      * Information about the particle.
      *
      * @param identifier The identifier of this model. Used to refer to this particle definition
-     * @param texture    The texture to use
+     * @param texture    The texture to use if material is null
+     * @param material   The material to use or <code>null</code>
      * @author Ocelot
      */
-    public record Description(String identifier, ModelTexture texture) {
-
-        public Description {
-            Objects.requireNonNull(identifier, "identifier");
-            Objects.requireNonNull(texture, "texture");
-        }
+    public record Description(String identifier, ModelTexture texture, @Nullable String material) {
 
         public static class Deserializer implements JsonDeserializer<Description> {
 
@@ -73,8 +70,9 @@ public record ParticleData(Description description,
                 } else {
                     texture = DataResult.success(ModelTexture.MISSING);
                 }
+                String material = PinwheelGsonHelper.getAsString(basicRenderParams, "material", null);
 
-                return new Description(identifier, texture.result().orElseThrow());
+                return new Description(identifier, texture.result().orElseThrow(), material);
             }
         }
     }
@@ -89,13 +87,6 @@ public record ParticleData(Description description,
                         CurveNode[] nodes,
                         MolangExpression input,
                         MolangExpression horizontalRange) {
-
-        public Curve {
-            Objects.requireNonNull(type, "type");
-            Objects.requireNonNull(nodes, "nodes");
-            Objects.requireNonNull(input, "input");
-            Objects.requireNonNull(horizontalRange, "horizontalRange");
-        }
 
         @Override
         public String toString() {
@@ -116,18 +107,16 @@ public record ParticleData(Description description,
                         return curveType;
                     }
                 }
-                throw new JsonSyntaxException(
-                        "Unsupported curve type: " + json.getAsString() + ". Supported curve types: " +
-                                Arrays.stream(CurveType.values())
-                                        .map(type -> type.name().toLowerCase(Locale.ROOT))
-                                        .collect(Collectors.joining(", ")));
+                throw new JsonSyntaxException("Unsupported curve type: " + json.getAsString() + ". Supported curve types: " +
+                        Arrays.stream(CurveType.values())
+                                .map(type -> type.name().toLowerCase(Locale.ROOT))
+                                .collect(Collectors.joining(", ")));
             }
 
             private static CurveNode[] parseNodes(JsonElement json, CurveType type) {
                 if (json.isJsonArray()) {
                     if (type == CurveType.BEZIER_CHAIN) {
-                        throw new JsonSyntaxException(
-                                "Bezier Chain expected JsonObject, was " + PinwheelGsonHelper.getType(json));
+                        throw new JsonSyntaxException("Bezier Chain expected JsonObject, was " + PinwheelGsonHelper.getType(json));
                     }
 
                     JsonArray array = PinwheelGsonHelper.convertToJsonArray(json, "nodes");
@@ -151,29 +140,19 @@ public record ParticleData(Description description,
                                 boolean singleValue = nodeJson.has("value");
                                 boolean singleSlope = nodeJson.has("slope");
                                 if (singleValue && (nodeJson.has("left_value") || nodeJson.has("right_value"))) {
-                                    throw new JsonSyntaxException(
-                                            "left_value and right_value must not be present with value");
+                                    throw new JsonSyntaxException("left_value and right_value must not be present with value");
                                 }
                                 if (singleSlope && (nodeJson.has("left_slope") || nodeJson.has("right_slope"))) {
-                                    throw new JsonSyntaxException(
-                                            "left_slope and right_slope must not be present with slope");
+                                    throw new JsonSyntaxException("left_slope and right_slope must not be present with slope");
                                 }
 
-                                MolangExpression leftValue =
-                                        singleValue ? JsonTupleParser.parseExpression(nodeJson.get("value"), "value") :
-                                                JsonTupleParser.parseExpression(nodeJson.get("left_value"), "left_value");
-                                MolangExpression rightValue = singleValue ? leftValue : JsonTupleParser.parseExpression(
-                                        nodeJson.get("right_value"), "right_value");
-                                MolangExpression leftSlope =
-                                        singleSlope ? JsonTupleParser.parseExpression(nodeJson.get("slope"), "slope") :
-                                                JsonTupleParser.parseExpression(nodeJson.get("left_slope"), "left_slope");
-                                MolangExpression rightSlope = singleSlope ? leftSlope : JsonTupleParser.parseExpression(
-                                        nodeJson.get("right_slope"), "right_slope");
-                                curveNodes.add(
-                                        new BezierChainCurveNode(time, leftValue, rightValue, leftSlope, rightSlope));
+                                MolangExpression leftValue = singleValue ? JsonTupleParser.parseExpression(nodeJson.get("value"), "value") : JsonTupleParser.parseExpression(nodeJson.get("left_value"), "left_value");
+                                MolangExpression rightValue = singleValue ? leftValue : JsonTupleParser.parseExpression(nodeJson.get("right_value"), "right_value");
+                                MolangExpression leftSlope = singleSlope ? JsonTupleParser.parseExpression(nodeJson.get("slope"), "slope") : JsonTupleParser.parseExpression(nodeJson.get("left_slope"), "left_slope");
+                                MolangExpression rightSlope = singleSlope ? leftSlope : JsonTupleParser.parseExpression(nodeJson.get("right_slope"), "right_slope");
+                                curveNodes.add(new BezierChainCurveNode(time, leftValue, rightValue, leftSlope, rightSlope));
                             } else {
-                                MolangExpression value =
-                                        JsonTupleParser.parseExpression(nodeJson.get("value"), "value");
+                                MolangExpression value = JsonTupleParser.parseExpression(nodeJson.get("value"), "value");
                                 curveNodes.add(new CurveNode(time, value));
                             }
                         } catch (NumberFormatException e) {
@@ -186,21 +165,16 @@ public record ParticleData(Description description,
                     curveNodes.sort((a, b) -> Float.compare(a.getTime(), b.getTime()));
                     return curveNodes.toArray(CurveNode[]::new);
                 }
-                throw new JsonSyntaxException(
-                        "Expected nodes to be a JsonArray or JsonObject, was " + PinwheelGsonHelper.getType(json));
+                throw new JsonSyntaxException("Expected nodes to be a JsonArray or JsonObject, was " + PinwheelGsonHelper.getType(json));
             }
 
             @Override
-            public Curve deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                    throws JsonParseException {
+            public Curve deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                 JsonObject jsonObject = PinwheelGsonHelper.convertToJsonObject(json, "curve");
                 CurveType type = parseType(jsonObject.get("type"));
-                CurveNode[] curves = jsonObject.has("nodes") ?
-                        parseNodes(jsonObject.get("nodes"), type) :
-                        new CurveNode[0];
+                CurveNode[] curves = jsonObject.has("nodes") ? parseNodes(jsonObject.get("nodes"), type) : new CurveNode[0];
                 MolangExpression input = JsonTupleParser.getExpression(jsonObject, "input", null);
-                MolangExpression horizontalRange =
-                        JsonTupleParser.getExpression(jsonObject, "horizontal_range", () -> MolangExpression.of(1.0F));
+                MolangExpression horizontalRange = JsonTupleParser.getExpression(jsonObject, "horizontal_range", () -> MolangExpression.of(1.0F));
                 return new Curve(type, curves, input, horizontalRange);
             }
         }
@@ -216,7 +190,7 @@ public record ParticleData(Description description,
 
         public CurveNode(float time, MolangExpression value) {
             this.time = time;
-            this.value = Objects.requireNonNull(value, "value");
+            this.value = value;
         }
 
         public float getTime() {
@@ -263,16 +237,12 @@ public record ParticleData(Description description,
         private final MolangExpression leftSlope;
         private final MolangExpression rightSlope;
 
-        public BezierChainCurveNode(float time,
-                                    MolangExpression leftValue,
-                                    MolangExpression rightValue,
-                                    MolangExpression leftSlope,
-                                    MolangExpression rightSlope) {
+        public BezierChainCurveNode(float time, MolangExpression leftValue, MolangExpression rightValue, MolangExpression leftSlope, MolangExpression rightSlope) {
             super(time, leftValue);
-            this.leftValue = Objects.requireNonNull(leftValue, "leftValue");
-            this.rightValue = Objects.requireNonNull(rightValue, "rightValue");
-            this.leftSlope = Objects.requireNonNull(leftSlope, "leftSlope");
-            this.rightSlope = Objects.requireNonNull(rightSlope, "rightSlope");
+            this.leftValue = leftValue;
+            this.rightValue = rightValue;
+            this.leftSlope = leftSlope;
+            this.rightSlope = rightSlope;
         }
 
         public MolangExpression getLeftValue() {
@@ -329,8 +299,7 @@ public record ParticleData(Description description,
     public static class Deserializer implements JsonDeserializer<ParticleData> {
 
         @Override
-        public ParticleData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
+        public ParticleData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             final JsonObject jsonObject = json.getAsJsonObject();
             final Description description = context.deserialize(jsonObject.get("description"), Description.class);
 
