@@ -111,16 +111,16 @@ public interface AnimatedBone extends ModelBone {
     record AnimationPose(Vector3f position, Vector3f rotation, Vector3f scale) {
 
         public AnimationPose() {
-            this(new Vector3f(), new Vector3f(), new Vector3f(1, 1, 1));
+            this(new Vector3f(), new Vector3f(), new Vector3f(1));
         }
 
         /**
          * Resets the transformation for this pose.
          */
         public void identity() {
-            this.position.set(0, 0, 0);
-            this.rotation.set(0, 0, 0);
-            this.scale.set(1, 1, 1);
+            this.position.set(0);
+            this.rotation.set(0);
+            this.scale.set(1);
         }
 
         /**
@@ -227,7 +227,7 @@ public interface AnimatedBone extends ModelBone {
          * @param textureWidth  The width of the texture. Used for calculating bone UV
          * @param textureHeight The height of the texture. Used for calculating bone UV
          * @return A new bone with all children assigned
-         * @throws IllegalStateException If there is a circular reference in children
+         * @throws GeometryCompileException If there is a circular reference in children
          */
         public AnimatedBone create(float textureWidth, float textureHeight) throws GeometryCompileException {
             this.validate();

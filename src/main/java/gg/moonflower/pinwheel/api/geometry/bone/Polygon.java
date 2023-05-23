@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @param material The material this polygon should use or <code>null</code> for the default
  * @param vertices The vertices in this model
- * @param normals
+ * @param normals  The normal directions for each vertex
  * @author Ocelot
  * @since 1.0.0
  */
