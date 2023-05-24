@@ -30,6 +30,13 @@ public interface AnimationController {
     Collection<PlayingAnimation> getPlayingAnimations();
 
     /**
+     * @return Whether no animations are currently playing
+     */
+    default boolean isNoAnimationPlaying() {
+        return this.getPlayingAnimations().isEmpty();
+    }
+
+    /**
      * Sets the animation time for all animations.
      *
      * @param time The new time in seconds
