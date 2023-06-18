@@ -1,8 +1,8 @@
 package gg.moonflower.pinwheel.api.particle.render;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.api.particle.Flipbook;
 import gg.moonflower.pinwheel.impl.particle.render.SingleQuadRenderPropertiesImpl;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 
 /**
  * Defines the render properties for a single quad.

@@ -4,14 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.api.particle.Flipbook;
 import gg.moonflower.pinwheel.api.particle.ParticleInstance;
 import gg.moonflower.pinwheel.api.particle.ParticleParser;
 import gg.moonflower.pinwheel.api.particle.render.SingleQuadRenderProperties;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package gg.moonflower.pinwheel.api.particle.component;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.api.particle.ParticleInstance;
 import gg.moonflower.pinwheel.api.particle.ParticleSourceObject;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;

@@ -2,10 +2,10 @@ package gg.moonflower.pinwheel.api.particle.component;
 
 import com.google.gson.*;
 import com.mojang.datafixers.util.Either;
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;

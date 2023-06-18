@@ -1,7 +1,7 @@
 import com.google.common.base.Stopwatch;
-import gg.moonflower.pinwheel.api.geometry.GeometryModelParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryCompileException;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
+import gg.moonflower.pinwheel.api.geometry.GeometryModelParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryTree;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import org.junit.jupiter.api.Test;

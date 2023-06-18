@@ -1,6 +1,7 @@
 package gg.moonflower.pinwheel.api.particle;
 
-import io.github.ocelot.molangcompiler.api.MolangExpression;
+
+import gg.moonflower.molangcompiler.api.MolangExpression;
 
 import java.util.Random;
 

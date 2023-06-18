@@ -1,6 +1,6 @@
 package gg.moonflower.pinwheel.api.particle;
 
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 
 /**
  * An instance of a particle that contains the basic requirements of all particles.

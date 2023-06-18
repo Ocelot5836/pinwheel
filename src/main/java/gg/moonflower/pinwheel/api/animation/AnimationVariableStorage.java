@@ -1,7 +1,7 @@
 package gg.moonflower.pinwheel.api.animation;
 
+import gg.moonflower.molangcompiler.api.bridge.MolangVariableProvider;
 import gg.moonflower.pinwheel.impl.animation.AnimationVariableStorageImpl;
-import io.github.ocelot.molangcompiler.api.bridge.MolangVariableProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -42,18 +42,43 @@ public interface AnimationVariableStorage extends MolangVariableProvider {
      */
     boolean hasField(String name);
 
+    /**
+     * Creates a new variable storage with the specified keys.
+     *
+     * @param names The names of the variable values
+     * @return A new storage for those values
+     */
     static AnimationVariableStorage create(Collection<String> names) {
         return new AnimationVariableStorageImpl(names);
     }
 
+    /**
+     * Creates a new variable storage with the specified keys and values.
+     *
+     * @param values The names and values of the variables to add
+     * @return A new storage for those values
+     */
     static AnimationVariableStorage create(Map<String, Value> values) {
         return new AnimationVariableStorageImpl(values);
     }
 
+    /**
+     * Represents a value obtainable by variable storage.
+     *
+     * @since 1.0.0
+     */
     interface Value {
 
+        /**
+         * @return The value stored
+         */
         float getValue();
 
+        /**
+         * Sets the value to store.
+         *
+         * @param value The new value to store
+         */
         void setValue(float value);
     }
 }

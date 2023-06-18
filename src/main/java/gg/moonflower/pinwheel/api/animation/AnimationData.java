@@ -1,9 +1,9 @@
 package gg.moonflower.pinwheel.api.animation;
 
 import com.google.gson.*;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
 
 import java.lang.reflect.Type;
 import java.util.*;

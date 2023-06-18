@@ -3,9 +3,9 @@ package gg.moonflower.pinwheel.api.particle.component;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
 
 /**
  * Component that specifies how a particle moves after colliding.

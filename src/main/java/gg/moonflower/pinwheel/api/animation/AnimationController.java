@@ -1,7 +1,7 @@
 package gg.moonflower.pinwheel.api.animation;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.api.geometry.GeometryModel;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 
 import java.util.Collection;
 

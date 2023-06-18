@@ -1,8 +1,8 @@
 package gg.moonflower.pinwheel.impl.animation;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.api.animation.AnimationData;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;

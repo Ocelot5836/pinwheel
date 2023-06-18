@@ -1,8 +1,8 @@
 package gg.moonflower.pinwheel.impl.animation;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.api.animation.AnimationData;
 import gg.moonflower.pinwheel.api.animation.PlayingAnimation;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -39,7 +39,7 @@ public class PlayingAnimationImpl implements PlayingAnimation {
             return 0;
         }
         environment.setThisValue(this.weight);
-        return this.weight * this.animation.blendWeight().safeResolve(environment);
+        return this.weight * environment.safeResolve(this.animation.blendWeight());
     }
 
     @Override

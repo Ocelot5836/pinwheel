@@ -1,7 +1,7 @@
 package gg.moonflower.pinwheel.api.animation;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.pinwheel.impl.animation.PlayingAnimationImpl;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
 
 /**
  * Represents an animation with a current animation state.

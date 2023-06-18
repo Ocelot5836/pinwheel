@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.api.particle.component.ParticleComponent;
 import gg.moonflower.pinwheel.api.texture.ModelTexture;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;

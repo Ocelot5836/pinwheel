@@ -1,5 +1,7 @@
 package gg.moonflower.pinwheel.api.geometry;
 
+import gg.moonflower.molangcompiler.api.MolangEnvironment;
+import gg.moonflower.molangcompiler.api.MolangRuntime;
 import gg.moonflower.pinwheel.api.animation.AnimationController;
 import gg.moonflower.pinwheel.api.animation.AnimationData;
 import gg.moonflower.pinwheel.api.animation.PlayingAnimation;
@@ -7,8 +9,6 @@ import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.transform.LocatorTransformation;
 import gg.moonflower.pinwheel.api.transform.MatrixStack;
 import gg.moonflower.pinwheel.impl.animation.AnimationKeyframeResolverImpl;
-import io.github.ocelot.molangcompiler.api.MolangEnvironment;
-import io.github.ocelot.molangcompiler.api.MolangRuntime;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;

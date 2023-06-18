@@ -1,10 +1,10 @@
 package gg.moonflower.pinwheel.api;
 
 import com.google.gson.*;
+import gg.moonflower.molangcompiler.api.GlobalMolangCompiler;
+import gg.moonflower.molangcompiler.api.MolangExpression;
+import gg.moonflower.molangcompiler.api.exception.MolangException;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
-import io.github.ocelot.molangcompiler.api.MolangCompiler;
-import io.github.ocelot.molangcompiler.api.MolangExpression;
-import io.github.ocelot.molangcompiler.api.exception.MolangException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -139,7 +139,7 @@ public interface JsonTupleParser {
                 return MolangExpression.of(valuePrimitive.getAsFloat());
             } else if (valuePrimitive.isString()) {
                 try {
-                    return MolangCompiler.compile(valuePrimitive.getAsString());
+                    return GlobalMolangCompiler.get().compile(valuePrimitive.getAsString());
                 } catch (MolangException e) {
                     throw new JsonParseException("Failed to compile MoLang expression", e);
                 }
