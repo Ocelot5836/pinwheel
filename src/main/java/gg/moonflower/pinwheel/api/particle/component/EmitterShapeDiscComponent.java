@@ -85,11 +85,11 @@ public record EmitterShapeDiscComponent(MolangExpression[] normal,
 
     @Override
     public void emitParticles(ParticleEmitterShape.Spawner spawner, int count) {
-        MolangEnvironment runtime = spawner.getEnvironment();
+        MolangEnvironment environment = spawner.getEnvironment();
         Random random = spawner.getRandom();
-        float normalX = this.normal[0].safeResolve(runtime);
-        float normalY = this.normal[1].safeResolve(runtime);
-        float normalZ = this.normal[2].safeResolve(runtime);
+        float normalX = environment.safeResolve(this.normal[0]);
+        float normalY = environment.safeResolve(this.normal[1]);
+        float normalZ = environment.safeResolve(this.normal[2]);
         float length = (float) Math.sqrt(normalX * normalX + normalY * normalY + normalZ * normalZ);
         normalX /= length;
         normalY /= length;
@@ -103,12 +103,12 @@ public record EmitterShapeDiscComponent(MolangExpression[] normal,
         Vector3f pos = new Vector3f();
         for (int i = 0; i < count; i++) {
             ParticleInstance particle = spawner.createParticle();
-            runtime = particle.getEnvironment();
+            environment = particle.getEnvironment();
 
-            float offsetX = this.offset[0].safeResolve(runtime);
-            float offsetY = this.offset[1].safeResolve(runtime);
-            float offsetZ = this.offset[2].safeResolve(runtime);
-            float radius = this.radius.safeResolve(runtime);
+            float offsetX = environment.safeResolve(this.offset[0]);
+            float offsetY = environment.safeResolve(this.offset[1]);
+            float offsetZ = environment.safeResolve(this.offset[2]);
+            float radius = environment.safeResolve(this.radius);
 
             double r = this.surfaceOnly ? radius : radius * Math.sqrt(random.nextFloat());
             double theta = 2 * Math.PI * random.nextFloat();
@@ -122,9 +122,9 @@ public record EmitterShapeDiscComponent(MolangExpression[] normal,
             float dy;
             float dz;
             if (this.direction != null) {
-                float directionX = Objects.requireNonNull(this.direction[0]).safeResolve(runtime);
-                float directionY = Objects.requireNonNull(this.direction[1]).safeResolve(runtime);
-                float directionZ = Objects.requireNonNull(this.direction[2]).safeResolve(runtime);
+                float directionX = environment.safeResolve(Objects.requireNonNull(this.direction[0], "direction[0]"));
+                float directionY = environment.safeResolve(Objects.requireNonNull(this.direction[1], "direction[1]"));
+                float directionZ = environment.safeResolve(Objects.requireNonNull(this.direction[2], "direction[2]"));
                 pos.set(directionX, directionY, directionZ);
                 quaternion.transform(pos);
                 dx = pos.x();

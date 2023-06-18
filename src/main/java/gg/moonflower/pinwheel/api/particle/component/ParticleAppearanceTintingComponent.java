@@ -221,7 +221,7 @@ public record ParticleAppearanceTintingComponent(ColorSupplier red,
 
         @Override
         public float get(ParticleInstance particle, MolangEnvironment environment) {
-            return this.component.safeResolve(environment);
+            return environment.safeResolve(this.component);
         }
     }
 
@@ -231,7 +231,7 @@ public record ParticleAppearanceTintingComponent(ColorSupplier red,
 
         @Override
         public float get(ParticleInstance particle, MolangEnvironment environment) {
-            float input = this.interpolant.safeResolve(environment);
+            float input = environment.safeResolve(this.interpolant);
             ColorSupplier start = this.colors[0];
             ColorSupplier end = this.colors[1];
             float startTime = this.times[0];

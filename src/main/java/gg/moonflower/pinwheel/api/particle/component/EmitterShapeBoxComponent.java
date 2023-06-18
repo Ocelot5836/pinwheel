@@ -46,14 +46,14 @@ public record EmitterShapeBoxComponent(MolangExpression[] offset,
         Random random = spawner.getRandom();
         for (int i = 0; i < count; i++) {
             ParticleInstance particle = spawner.createParticle();
-            MolangEnvironment runtime = particle.getEnvironment();
+            MolangEnvironment environment = particle.getEnvironment();
 
-            float offsetX = this.offset[0].safeResolve(runtime);
-            float offsetY = this.offset[1].safeResolve(runtime);
-            float offsetZ = this.offset[2].safeResolve(runtime);
-            float radiusX = this.halfDimensions[0].safeResolve(runtime);
-            float radiusY = this.halfDimensions[1].safeResolve(runtime);
-            float radiusZ = this.halfDimensions[2].safeResolve(runtime);
+            float offsetX = environment.safeResolve(this.offset[0]);
+            float offsetY = environment.safeResolve(this.offset[1]);
+            float offsetZ = environment.safeResolve(this.offset[2]);
+            float radiusX = environment.safeResolve(this.halfDimensions[0]);
+            float radiusY = environment.safeResolve(this.halfDimensions[1]);
+            float radiusZ = environment.safeResolve(this.halfDimensions[2]);
             float rx = this.surfaceOnly ? radiusX : radiusX * random.nextFloat();
             float ry = this.surfaceOnly ? radiusY : radiusY * random.nextFloat();
             float rz = this.surfaceOnly ? radiusZ : radiusZ * random.nextFloat();
@@ -66,9 +66,9 @@ public record EmitterShapeBoxComponent(MolangExpression[] offset,
             float dy;
             float dz;
             if (this.direction != null) {
-                dx = Objects.requireNonNull(this.direction[0]).safeResolve(runtime);
-                dy = Objects.requireNonNull(this.direction[1]).safeResolve(runtime);
-                dz = Objects.requireNonNull(this.direction[2]).safeResolve(runtime);
+                dx = environment.safeResolve(Objects.requireNonNull(this.direction[0], "direction[0]"));
+                dy = environment.safeResolve(Objects.requireNonNull(this.direction[1], "direction[1]"));
+                dz = environment.safeResolve(Objects.requireNonNull(this.direction[2], "direction[2]"));
             } else {
                 dx = x;
                 dy = y;

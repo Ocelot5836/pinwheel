@@ -77,7 +77,7 @@ public interface SingleQuadRenderProperties extends ParticleRenderProperties {
      * @param maxLife       The maximum life of the particle
      */
     default void setUV(MolangEnvironment environment, int textureWidth, int textureHeight, Flipbook flipbook, float time, float maxLife) {
-        int maxFrame = (int) flipbook.maxFrame().safeResolve(environment);
+        int maxFrame = (int) environment.safeResolve(flipbook.maxFrame());
         int frame;
         if (flipbook.stretchToLifetime()) {
             frame = Math.min((int) (time / maxLife * (maxFrame + 1)), maxFrame);
@@ -90,8 +90,8 @@ public interface SingleQuadRenderProperties extends ParticleRenderProperties {
             }
         }
 
-        float u = flipbook.baseU().safeResolve(environment);
-        float v = flipbook.baseV().safeResolve(environment);
+        float u = environment.safeResolve(flipbook.baseU());
+        float v = environment.safeResolve(flipbook.baseV());
         float uSize = flipbook.sizeU();
         float vSize = flipbook.sizeV();
         float uo = flipbook.stepU() * frame;

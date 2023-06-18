@@ -172,10 +172,10 @@ public record ParticleAppearanceBillboardComponent(MolangExpression[] size,
 
         @Override
         public void setUV(ParticleInstance particle, MolangEnvironment environment, SingleQuadRenderProperties properties) {
-            float u0 = this.uv[0].safeResolve(environment);
-            float v0 = this.uv[1].safeResolve(environment);
-            float u1 = u0 + this.uvSize[0].safeResolve(environment);
-            float v1 = v0 + this.uvSize[1].safeResolve(environment);
+            float u0 = environment.safeResolve(this.uv[0]);
+            float v0 = environment.safeResolve(this.uv[1]);
+            float u1 = u0 + environment.safeResolve(this.uvSize[0]);
+            float v1 = v0 + environment.safeResolve(this.uvSize[1]);
             properties.setUV(u0 / (float) this.textureWidth, v0 / (float) this.textureHeight, u1 / (float) this.textureWidth, v1 / (float) this.textureHeight);
         }
     }
