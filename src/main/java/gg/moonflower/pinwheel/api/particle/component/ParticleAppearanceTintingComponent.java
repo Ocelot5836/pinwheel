@@ -2,10 +2,10 @@ package gg.moonflower.pinwheel.api.particle.component;
 
 import com.google.gson.*;
 import com.mojang.datafixers.util.Pair;
-import gg.moonflower.molangcompiler.api.GlobalMolangCompiler;
 import gg.moonflower.molangcompiler.api.MolangEnvironment;
 import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
+import gg.moonflower.pinwheel.api.PinwheelMolangCompiler;
 import gg.moonflower.pinwheel.api.particle.ParticleInstance;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
@@ -126,7 +126,7 @@ public record ParticleAppearanceTintingComponent(ColorSupplier red,
                     colors[i] = ColorSupplier.constant(PinwheelGsonHelper.convertToFloat(colorElement, name + "[" + i + "]"));
                 } else {
                     try {
-                        MolangExpression expression = GlobalMolangCompiler.get().compile(PinwheelGsonHelper.convertToString(colorElement, name + "[" + i + "]"));
+                        MolangExpression expression = PinwheelMolangCompiler.get().compile(PinwheelGsonHelper.convertToString(colorElement, name + "[" + i + "]"));
                         colors[i] = ColorSupplier.molang(expression);
                     } catch (Exception e) {
                         throw new JsonSyntaxException("Failed to parse " + name + "[" + i + "]", e);
