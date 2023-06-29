@@ -1,5 +1,6 @@
 package gg.moonflower.pinwheel.impl.animation;
 
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.animation.AnimationVariableStorage;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -34,10 +35,10 @@ public class AnimationVariableStorageImpl implements AnimationVariableStorage {
 
     @Override
     public void addMolangVariables(Context context) {
-        this.fields.forEach((name, field) -> context.addQuery(name, field::getValue));
+        this.fields.forEach((name, field) -> context.addQuery(name, MolangExpression.of(field::getValue)));
     }
 
-    private static class ValueImpl implements Value {
+    public static class ValueImpl implements Value {
 
         private float value;
 
