@@ -25,7 +25,7 @@ dependencies {
 
     implementation "com.mojang:datafixerupper:4.1.27"
 //    implementation "com.github.MoonflowerTeam:molang-compiler:master-SNAPSHOT"
-    implementation "gg.moonflower:molang-compiler:3.0.0"
+    implementation "gg.moonflower:molang-compiler:3.0.1"
     implementation "com.google.code.gson:gson:2.10.1"
     implementation "org.joml:joml:1.10.5"
 
