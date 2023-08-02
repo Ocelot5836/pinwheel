@@ -216,7 +216,9 @@ public record ParticleData(Description description,
 
         @Override
         public int hashCode() {
-            return Objects.hash(this.time, this.value);
+            int result = (this.time != 0.0f ? Float.floatToIntBits(this.time) : 0);
+            result = 31 * result + this.value.hashCode();
+            return result;
         }
 
         @Override
@@ -281,7 +283,12 @@ public record ParticleData(Description description,
 
         @Override
         public int hashCode() {
-            return Objects.hash(super.hashCode(), this.leftValue, this.rightValue, this.leftSlope, this.rightSlope);
+            int result = super.hashCode();
+            result = 31 * result + this.leftValue.hashCode();
+            result = 31 * result + this.rightValue.hashCode();
+            result = 31 * result + this.leftSlope.hashCode();
+            result = 31 * result + this.rightSlope.hashCode();
+            return result;
         }
 
         @Override

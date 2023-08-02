@@ -15,6 +15,11 @@ import java.util.Collection;
 public interface AnimationController {
 
     /**
+     * Clears all playing animations.
+     */
+    void clearAnimations();
+
+    /**
      * @return The MoLang environment this animation is running in
      */
     MolangEnvironment getEnvironment();

@@ -11,7 +11,6 @@ import gg.moonflower.pinwheel.api.particle.ParticleSourceObject;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -25,7 +24,6 @@ public record EmitterShapeEntityBoxComponent(boolean surfaceOnly,
                                              boolean inwards) implements ParticleEmitterShape {
 
     public static EmitterShapeEntityBoxComponent deserialize(JsonElement json) throws JsonParseException {
-        Objects.requireNonNull(json, "json");
         JsonObject jsonObject = json.getAsJsonObject();
         boolean surfaceOnly = PinwheelGsonHelper.getAsBoolean(jsonObject, "surface_only", false);
         Either<Boolean, MolangExpression[]> dir = ParticleComponent.parseDirection(jsonObject, "direction");
@@ -45,9 +43,9 @@ public record EmitterShapeEntityBoxComponent(boolean surfaceOnly,
                 double dy = 0;
                 double dz = 0;
                 if (this.direction != null) {
-                    dx = environment.safeResolve(Objects.requireNonNull(this.direction[0]));
-                    dy = environment.safeResolve(Objects.requireNonNull(this.direction[1]));
-                    dz = environment.safeResolve(Objects.requireNonNull(this.direction[2]));
+                    dx = environment.safeResolve(this.direction[0]);
+                    dy = environment.safeResolve(this.direction[1]);
+                    dz = environment.safeResolve(this.direction[2]);
                 }
                 spawner.setPositionVelocity(particle, 0, 0, 0, dx, dy, dz);
                 spawner.spawnParticle(particle);
@@ -78,9 +76,9 @@ public record EmitterShapeEntityBoxComponent(boolean surfaceOnly,
             double dy;
             double dz;
             if (this.direction != null) {
-                dx = environment.safeResolve(Objects.requireNonNull(this.direction[0], "direction[0]"));
-                dy = environment.safeResolve(Objects.requireNonNull(this.direction[1], "direction[1]"));
-                dz = environment.safeResolve(Objects.requireNonNull(this.direction[2], "direction[2]"));
+                dx = environment.safeResolve(this.direction[0]);
+                dy = environment.safeResolve(this.direction[1]);
+                dz = environment.safeResolve(this.direction[2]);
             } else {
                 dx = x;
                 dy = y;

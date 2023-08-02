@@ -7,8 +7,6 @@ import org.joml.Matrix3fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
-import java.util.Objects;
-
 /**
  * A representation of a part of a geometry model as a set of vertices and normals.
  *
@@ -21,8 +19,6 @@ import java.util.Objects;
 public record Polygon(@Nullable String material, Vertex[] vertices, Vector3fc[] normals) {
 
     public Polygon {
-        Objects.requireNonNull(vertices, "vertices");
-        Objects.requireNonNull(normals, "normals");
         Validate.isTrue(vertices.length == normals.length, "There must be an equal number of vertices and normals");
     }
 

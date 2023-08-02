@@ -3,8 +3,6 @@ package gg.moonflower.pinwheel.api.geometry.bone;
 import org.joml.Matrix4fc;
 import org.joml.Vector4f;
 
-import java.util.Objects;
-
 /**
  * A single vertex in a definition of geometry.
  *
@@ -32,7 +30,6 @@ public record Vertex(float x, float y, float z, float u, float v) {
      * @return A new transformed vertex
      */
     public static Vertex create(Matrix4fc transform, float x, float y, float z, float u, float v) {
-        Objects.requireNonNull(transform, "transform");
         TRANSFORM_VECTOR.set(x, y, z, 1.0F);
         TRANSFORM_VECTOR.mul(transform);
         return new Vertex(TRANSFORM_VECTOR.x(), TRANSFORM_VECTOR.y(), TRANSFORM_VECTOR.z(), u, v);

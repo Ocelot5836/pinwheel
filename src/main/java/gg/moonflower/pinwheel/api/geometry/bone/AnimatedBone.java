@@ -162,12 +162,11 @@ public interface AnimatedBone extends ModelBone {
         private final List<Builder> children;
 
         private Builder(GeometryModelData.Bone bone) {
-            this.bone = Objects.requireNonNull(bone, "bone");
+            this.bone = bone;
             this.children = new ArrayList<>();
         }
 
         private Builder(Builder copy) {
-            Objects.requireNonNull(copy, "copy");
             this.bone = copy.bone;
             this.children = copy.children.stream().map(Builder::new).collect(Collectors.toList());
         }
@@ -187,7 +186,6 @@ public interface AnimatedBone extends ModelBone {
          * @param child The child to add
          */
         public Builder addChild(Builder child) {
-            Objects.requireNonNull(child, "child");
             this.children.add(child);
             return this;
         }

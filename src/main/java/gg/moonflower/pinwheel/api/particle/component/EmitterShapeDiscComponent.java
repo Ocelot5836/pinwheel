@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -122,9 +121,9 @@ public record EmitterShapeDiscComponent(MolangExpression[] normal,
             float dy;
             float dz;
             if (this.direction != null) {
-                float directionX = environment.safeResolve(Objects.requireNonNull(this.direction[0], "direction[0]"));
-                float directionY = environment.safeResolve(Objects.requireNonNull(this.direction[1], "direction[1]"));
-                float directionZ = environment.safeResolve(Objects.requireNonNull(this.direction[2], "direction[2]"));
+                float directionX = environment.safeResolve(this.direction[0]);
+                float directionY = environment.safeResolve(this.direction[1]);
+                float directionZ = environment.safeResolve(this.direction[2]);
                 pos.set(directionX, directionY, directionZ);
                 quaternion.transform(pos);
                 dx = pos.x();

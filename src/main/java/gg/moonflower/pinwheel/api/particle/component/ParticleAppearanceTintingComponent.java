@@ -10,7 +10,10 @@ import gg.moonflower.pinwheel.api.particle.ParticleInstance;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Component that specifies the color of a particle.
@@ -24,7 +27,6 @@ public record ParticleAppearanceTintingComponent(ColorSupplier red,
                                                  ColorSupplier alpha) implements ParticleComponent {
 
     public static ParticleAppearanceTintingComponent deserialize(JsonElement json) throws JsonParseException {
-        Objects.requireNonNull(json, "json");
         JsonObject jsonObject = json.getAsJsonObject();
         if (!jsonObject.has("color")) {
             throw new JsonSyntaxException("Missing color, expected to find a JsonObject, JsonArray, string, or float");

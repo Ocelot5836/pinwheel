@@ -5,12 +5,11 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Quaternionfc;
 
-import java.util.Objects;
-
 /**
  * A set of matrix transformations that can be used while rendering.
  *
  * @author Ocelot
+ * @since 1.0.0
  */
 public interface MatrixStack {
 
@@ -47,7 +46,6 @@ public interface MatrixStack {
      * @param rotation The rotation to use
      */
     default void rotate(Quaternionfc rotation) {
-        Objects.requireNonNull(rotation, "rotation");
         this.position().rotate(rotation);
     }
 
@@ -132,7 +130,6 @@ public interface MatrixStack {
      * @param stack The stack to copy
      */
     default void copy(MatrixStack stack) {
-        Objects.requireNonNull(stack, "stack");
         this.position().set(stack.position());
     }
 

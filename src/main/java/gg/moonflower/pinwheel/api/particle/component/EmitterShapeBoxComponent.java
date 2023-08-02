@@ -11,7 +11,6 @@ import gg.moonflower.pinwheel.api.particle.ParticleInstance;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -66,9 +65,9 @@ public record EmitterShapeBoxComponent(MolangExpression[] offset,
             float dy;
             float dz;
             if (this.direction != null) {
-                dx = environment.safeResolve(Objects.requireNonNull(this.direction[0], "direction[0]"));
-                dy = environment.safeResolve(Objects.requireNonNull(this.direction[1], "direction[1]"));
-                dz = environment.safeResolve(Objects.requireNonNull(this.direction[2], "direction[2]"));
+                dx = environment.safeResolve(this.direction[0]);
+                dy = environment.safeResolve(this.direction[1]);
+                dz = environment.safeResolve(this.direction[2]);
             } else {
                 dx = x;
                 dy = y;

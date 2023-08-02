@@ -15,7 +15,6 @@ import java.util.Map;
  * @author Ocelot
  * @since 1.0.0
  */
-@FunctionalInterface
 public interface ParticleComponentParser {
 
     /**

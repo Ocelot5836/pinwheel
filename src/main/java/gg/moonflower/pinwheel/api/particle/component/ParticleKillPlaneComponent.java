@@ -6,8 +6,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 
-import java.util.Objects;
-
 /**
  * Component that kills all particles that pass over a plane. Uses the standard <code>ax + by + cz + d = 0</code> form.
  *
@@ -21,7 +19,6 @@ public record ParticleKillPlaneComponent(float a, float b, float c, float d) imp
     }
 
     public static ParticleKillPlaneComponent deserialize(JsonElement json) throws JsonParseException {
-        Objects.requireNonNull(json, "json");
         if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
             throw new JsonSyntaxException("Molang expressions are not supported");
         }

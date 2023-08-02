@@ -15,7 +15,6 @@ import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -93,7 +92,7 @@ public record ParticleAppearanceBillboardComponent(MolangExpression[] size,
         private final String name;
 
         FaceCameraMode(String name) {
-            this.name = Objects.requireNonNull(name, "name");
+            this.name = name;
         }
 
         /**
@@ -111,7 +110,6 @@ public record ParticleAppearanceBillboardComponent(MolangExpression[] size,
          * @throws JsonParseException If the mode does not exist
          */
         public static FaceCameraMode parseCameraMode(String type) throws JsonParseException {
-            Objects.requireNonNull(type, "type");
             for (FaceCameraMode cameraMode : FaceCameraMode.values()) {
                 if (cameraMode.name.equalsIgnoreCase(type)) {
                     return cameraMode;

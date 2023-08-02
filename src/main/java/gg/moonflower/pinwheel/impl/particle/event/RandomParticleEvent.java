@@ -4,7 +4,6 @@ import gg.moonflower.pinwheel.api.particle.ParticleContext;
 import gg.moonflower.pinwheel.api.particle.ParticleEvent;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -16,8 +15,6 @@ public class RandomParticleEvent implements ParticleEvent {
     private final int totalWeight;
 
     public RandomParticleEvent(ParticleEvent[] events, int[] weights) {
-        Objects.requireNonNull(events, "events");
-        Objects.requireNonNull(weights, "weights");
         if (events.length != weights.length) {
             throw new IllegalArgumentException("Expected " + events.length + " weights, got " + weights.length);
         }

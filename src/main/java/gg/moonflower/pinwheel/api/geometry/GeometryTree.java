@@ -32,7 +32,6 @@ public interface GeometryTree extends LocatorAccess {
      * @param copy   The bone to copy the angles of
      */
     default void copyAngles(@Nullable String parent, ModelBone copy) {
-        Objects.requireNonNull(copy, "copy");
         for (AnimatedBone bone : this.getBones()) {
             if (Objects.equals(bone.getBone().parent(), parent)) {
                 bone.copyTransform(copy);
@@ -87,7 +86,6 @@ public interface GeometryTree extends LocatorAccess {
      * @throws GeometryCompileException If there is an issue linking bones to parents or compiling bones
      */
     static GeometryTree create(GeometryModelData model) throws GeometryCompileException {
-        Objects.requireNonNull(model, "model");
         GeometryModelData.Description desc = model.description();
         return create(desc.textureWidth(), desc.textureHeight(), model.bones());
     }

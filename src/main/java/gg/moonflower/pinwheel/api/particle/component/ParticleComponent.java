@@ -8,8 +8,6 @@ import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 /**
  * Defines a component in a particle definition that can be used to create actual Artemis entity components.
  *
@@ -48,8 +46,6 @@ public interface ParticleComponent {
      * @throws JsonSyntaxException If the file is malformed
      */
     static String[] getEvents(JsonObject json, String name) throws JsonSyntaxException {
-        Objects.requireNonNull(json, "json");
-        Objects.requireNonNull(name, "name");
         if (!json.has(name)) {
             return new String[0];
         }
@@ -65,7 +61,6 @@ public interface ParticleComponent {
      * @throws JsonSyntaxException If the file is malformed
      */
     static String[] parseEvents(@Nullable JsonElement element, String name) throws JsonSyntaxException {
-        Objects.requireNonNull(name, "name");
         if (element == null) {
             throw new JsonSyntaxException("Missing " + name + ", expected to find a JsonArray or string");
         }
