@@ -59,6 +59,7 @@ public record Polygon(@Nullable String material, Vertex[] vertices, Vector3fc[] 
         }
 
         Vector3f normal = new Vector3f(direction.normal());
+        normal.mul(1.0F, 1.0F, -1.0F);
         if (mirror) {
             normal.mul(-1.0F, 1.0F, 1.0F);
         }
