@@ -1,11 +1,9 @@
 package gg.moonflower.pinwheel.impl;
 
 import com.google.gson.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public final class PinwheelGsonHelper {
@@ -68,14 +66,6 @@ public final class PinwheelGsonHelper {
         return json.has(name) ? convertToInt(json.get(name), name) : defaultValue;
     }
 
-    public static short convertToShort(JsonElement element, String name) throws JsonSyntaxException {
-        if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isNumber()) {
-            return element.getAsShort();
-        } else {
-            throw new JsonSyntaxException("Expected " + name + " to be a Short, was " + getType(element));
-        }
-    }
-
     public static JsonObject convertToJsonObject(JsonElement element, String name) throws JsonSyntaxException {
         if (element.isJsonObject()) {
             return element.getAsJsonObject();
@@ -115,7 +105,10 @@ public final class PinwheelGsonHelper {
     }
 
     public static String getType(@Nullable JsonElement element) {
-        String string = StringUtils.abbreviateMiddle(String.valueOf(element), "...", 10);
+        String string = String.valueOf(element);
+        if (string.length() > 10) {
+            string = string.substring(0, 10) + "...";
+        }
         if (element == null) {
             return "null (missing)";
         } else if (element.isJsonNull()) {

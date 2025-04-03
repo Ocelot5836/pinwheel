@@ -18,16 +18,15 @@ public final class GeometryModelParserImpl {
 
     public static GeometryModelData[] parseModel(JsonElement json) throws JsonParseException {
         String formatVersion = PinwheelGsonHelper.getAsString(json.getAsJsonObject(), "format_version");
-        if (formatVersion.equals("1.12.0")) {
-            return Geometry1120Parser.parseModel(json);
-        }
-        if (formatVersion.equals("1.8.0")) {
-            return Geometry180Parser.parseModel(json);
-        }
-        if (formatVersion.equals("1.1.0")) {
-            return Geometry110Parser.parseModel(json);
-        }
-        throw new JsonSyntaxException("Unsupported geometry version: " + formatVersion);
+        return switch (formatVersion) {
+            case "1.21.0" -> Geometry1210Parser.parseModel(json);
+            case "1.16.0" -> Geometry1160Parser.parseModel(json);
+            case "1.14.0", "1.19.30" -> Geometry1140Parser.parseModel(json);
+            case "1.12.0" -> Geometry1120Parser.parseModel(json);
+            case "1.8.0" -> Geometry180Parser.parseModel(json);
+            case "1.1.0" -> Geometry110Parser.parseModel(json);
+            default -> throw new JsonSyntaxException("Unsupported geometry version: " + formatVersion);
+        };
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")

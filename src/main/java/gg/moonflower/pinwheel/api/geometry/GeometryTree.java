@@ -3,6 +3,7 @@ package gg.moonflower.pinwheel.api.geometry;
 import gg.moonflower.pinwheel.api.geometry.bone.AnimatedBone;
 import gg.moonflower.pinwheel.api.geometry.bone.ModelBone;
 import gg.moonflower.pinwheel.api.transform.MatrixStack;
+import gg.moonflower.pinwheel.impl.geometry.EmptyGeometryTree;
 import gg.moonflower.pinwheel.impl.geometry.GeometryTreeImpl;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,5 +102,12 @@ public interface GeometryTree extends LocatorAccess {
      */
     static GeometryTree create(int textureWidth, int textureHeight, GeometryModelData.Bone[] bones) throws GeometryCompileException {
         return new GeometryTreeImpl(textureWidth, textureHeight, bones);
+    }
+
+    /**
+     * @return A geometry tree with no elements
+     */
+    static GeometryTree empty() {
+        return EmptyGeometryTree.INSTANCE;
     }
 }

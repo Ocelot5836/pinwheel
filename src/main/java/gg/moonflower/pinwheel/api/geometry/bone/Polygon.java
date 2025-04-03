@@ -1,7 +1,6 @@
 package gg.moonflower.pinwheel.api.geometry.bone;
 
 import gg.moonflower.pinwheel.api.FaceDirection;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3fc;
 import org.joml.Vector3f;
@@ -19,7 +18,9 @@ import org.joml.Vector3fc;
 public record Polygon(@Nullable String material, Vertex[] vertices, Vector3fc[] normals) {
 
     public Polygon {
-        Validate.isTrue(vertices.length == normals.length, "There must be an equal number of vertices and normals");
+        if (vertices.length != normals.length) {
+            throw new IllegalArgumentException("Vertices and normals must have the same length");
+        }
     }
 
     /**
@@ -47,7 +48,9 @@ public record Polygon(@Nullable String material, Vertex[] vertices, Vector3fc[] 
      * @return A new polygon that represents a quad
      */
     public static Polygon quad(@Nullable String material, Vertex[] vertices, Matrix3fc normalMatrix, boolean mirror, FaceDirection direction) {
-        Validate.isTrue(vertices.length == 4, "Quads must have 4 vertices");
+        if (vertices.length != 4) {
+            throw new IllegalArgumentException("Quads must have 4 vertices");
+        }
         if (mirror) {
             int i = vertices.length;
 

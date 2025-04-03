@@ -3,7 +3,6 @@ package gg.moonflower.pinwheel.api.texture;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +39,7 @@ public record ModelTexture(Type type,
                     .optionalFieldOf("layer", TextureLayer.CUTOUT_CULL).forGetter(ModelTexture::layer),
             Codec.STRING.fieldOf("texture").forGetter(ModelTexture::data),
             Codec.STRING.optionalFieldOf("color", "0xFFFFFF")
-                    .xmap(NumberUtils::createInteger, color -> "0x" + Integer.toHexString(color & 0xFFFFFF)
+                    .xmap(color -> Integer.parseUnsignedInt(color.substring(2), 16), color -> "0x" + Integer.toHexString(color & 0xFFFFFF)
                             .toUpperCase(Locale.ROOT))
                     .forGetter(ModelTexture::color),
             Codec.BOOL.optionalFieldOf("glowing", false).forGetter(ModelTexture::glowing)

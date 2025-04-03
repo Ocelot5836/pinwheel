@@ -54,12 +54,12 @@ public final class Geometry110Parser {
                 bones = new GeometryModelData.Bone[0];
             }
 
-            data = new GeometryModelData(description, bones);
+            data = new GeometryModelData(description, null, bones);
         }
         return data != null ? new GeometryModelData[]{data} : new GeometryModelData[0];
     }
 
-    private static GeometryModelData.Description parseDescription(String identifier, JsonObject json) throws JsonParseException {
+    static GeometryModelData.Description parseDescription(String identifier, JsonObject json) throws JsonParseException {
         float visibleBoundsWidth = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_width", 0);
         float visibleBoundsHeight = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_height", 0);
         float[] visibleBoundsOffset = JsonTupleParser.getFloat(json, "visible_bounds_offset", 3, () -> new float[3]);
@@ -75,7 +75,7 @@ public final class Geometry110Parser {
         return new GeometryModelData.Description(identifier, visibleBoundsWidth, visibleBoundsHeight, new Vector3f(visibleBoundsOffset[0], visibleBoundsOffset[1], visibleBoundsOffset[2]), textureWidth, textureHeight, preserveModelPose2588);
     }
 
-    private static GeometryModelData.Bone parseBone(JsonObject json) throws JsonParseException {
+    static GeometryModelData.Bone parseBone(JsonObject json) throws JsonParseException {
         String name = PinwheelGsonHelper.getAsString(json, "name");
         boolean reset2588 = PinwheelGsonHelper.getAsBoolean(json, "reset", false);
         boolean neverRender2588 = PinwheelGsonHelper.getAsBoolean(json, "neverrender", false);
@@ -89,14 +89,15 @@ public final class Geometry110Parser {
         GeometryModelData.Cube[] cubes = json.has("cubes") ? parseCubes(json) : new GeometryModelData.Cube[0];
         GeometryModelData.Locator[] locators = json.has("locators") ? parseLocators(json) : new GeometryModelData.Locator[0];
 
-        return new GeometryModelData.Bone(name, reset2588, neverRender2588, parent, new Vector3f(pivot[0], pivot[1], pivot[2]), new Vector3f(rotation[0], rotation[1], rotation[2]), new Vector3f(), mirror, inflate, debug, cubes, locators, null);
+        return new GeometryModelData.Bone(name, reset2588, neverRender2588, parent, new Vector3f(pivot[0], pivot[1], pivot[2]), new Vector3f(rotation[0], rotation[1], rotation[2]), new Vector3f(), mirror, inflate, debug, cubes, locators, null, null);
     }
 
-    private static GeometryModelData.Cube[] parseCubes(JsonObject json) {
+    static GeometryModelData.Cube[] parseCubes(JsonObject json) {
         JsonArray cubesJson = PinwheelGsonHelper.getAsJsonArray(json, "cubes");
         GeometryModelData.Cube[] cubes = new GeometryModelData.Cube[cubesJson.size()];
-        for (int i = 0; i < cubesJson.size(); i++)
+        for (int i = 0; i < cubesJson.size(); i++) {
             cubes[i] = parseCube(PinwheelGsonHelper.convertToJsonObject(cubesJson.get(i), "cubes[" + i + "]"));
+        }
         return cubes;
     }
 
@@ -110,7 +111,7 @@ public final class Geometry110Parser {
         }).toArray(GeometryModelData.Locator[]::new);
     }
 
-    private static GeometryModelData.Cube parseCube(JsonObject json) throws JsonParseException {
+    static GeometryModelData.Cube parseCube(JsonObject json) throws JsonParseException {
         JsonObject cubeJson = json.getAsJsonObject();
         float[] origin = JsonTupleParser.getFloat(cubeJson, "origin", 3, () -> new float[3]);
         float[] size = JsonTupleParser.getFloat(cubeJson, "size", 3, () -> new float[3]);
@@ -134,12 +135,12 @@ public final class Geometry110Parser {
 
         GeometryModelData.CubeUV[] uvs = new GeometryModelData.CubeUV[6];
         float[] uv = JsonTupleParser.getFloat(cubeJson, "uv", 2, () -> new float[2]);
-        uvs[FaceDirection.NORTH.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[2], uv[1] + size[2], size[0], size[1], "texture");
-        uvs[FaceDirection.EAST.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0], uv[1] + size[2], size[2], size[1], "texture");
-        uvs[FaceDirection.SOUTH.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2] * 2, uv[1] + size[2], size[0], size[1], "texture");
-        uvs[FaceDirection.WEST.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2], uv[1] + size[2], size[2], size[1], "texture");
-        uvs[FaceDirection.UP.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[2], uv[1], size[0], size[2], "texture");
-        uvs[FaceDirection.DOWN.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2], uv[1], size[0], size[2], "texture");
+        uvs[FaceDirection.NORTH.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[2], uv[1] + size[2], size[0], size[1], GeometryModelData.CubeUVRotation.ROT_0, "texture");
+        uvs[FaceDirection.EAST.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0], uv[1] + size[2], size[2], size[1], GeometryModelData.CubeUVRotation.ROT_0, "texture");
+        uvs[FaceDirection.SOUTH.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2] * 2, uv[1] + size[2], size[0], size[1], GeometryModelData.CubeUVRotation.ROT_0, "texture");
+        uvs[FaceDirection.WEST.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2], uv[1] + size[2], size[2], size[1], GeometryModelData.CubeUVRotation.ROT_0, "texture");
+        uvs[FaceDirection.UP.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[2], uv[1], size[0], size[2], GeometryModelData.CubeUVRotation.ROT_0, "texture");
+        uvs[FaceDirection.DOWN.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0] + size[0] + size[2], uv[1], size[0], size[2], GeometryModelData.CubeUVRotation.ROT_0, "texture");
         return uvs;
     }
 }

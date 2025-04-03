@@ -8,8 +8,6 @@ import com.google.gson.JsonSyntaxException;
 import gg.moonflower.pinwheel.api.particle.ParticleComponentParser;
 import gg.moonflower.pinwheel.api.particle.component.*;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +17,6 @@ import java.util.ServiceLoader;
 @ApiStatus.Internal
 public final class ParticleComponentParserImpl {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleComponentParser.class);
     private static final ParticleComponentParser INSTANCE = ServiceLoader.load(ParticleComponentParser.class).findFirst().orElseGet(() -> ParticleComponentParserImpl::deserialize);
     private static final Map<String, ParticleComponent.Factory> FACTORIES;
 
@@ -76,7 +73,6 @@ public final class ParticleComponentParserImpl {
             try {
                 String id = entry.getKey();
                 if (!FACTORIES.containsKey(id)) {
-                    LOGGER.error("Unknown particle component: " + entry.getKey());
                     continue;
                 }
 

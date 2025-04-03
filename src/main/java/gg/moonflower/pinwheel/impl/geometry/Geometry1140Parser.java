@@ -9,39 +9,25 @@ import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * @author Ocelot
  */
 @ApiStatus.Internal
-public final class Geometry180Parser {
+public final class Geometry1140Parser {
 
-    static final Gson GSON = new GsonBuilder().
-            registerTypeAdapter(GeometryModelData.Polygon.class, new GeometryModelData.Polygon.Deserializer()).
-            registerTypeAdapter(GeometryModelData.PolyMesh.class, new GeometryModelData.PolyMesh.Deserializer()).
-            create();
-
-    private Geometry180Parser() {
+    private Geometry1140Parser() {
     }
 
-    static GeometryModelData[] parseModel(JsonElement json) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
-
-        GeometryModelData data = null;
-        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-            if (!entry.getKey().startsWith("geometry.")) {
-                continue;
-            }
-            if (data != null) {
-                throw new JsonSyntaxException("1.8.0 does not allow multiple geometry definitions per file.");
-            }
-
-            JsonObject object = PinwheelGsonHelper.convertToJsonObject(entry.getValue(), entry.getKey());
+    public static GeometryModelData[] parseModel(JsonElement json) throws JsonParseException {
+        JsonArray jsonArray = PinwheelGsonHelper.getAsJsonArray(json.getAsJsonObject(), "minecraft:geometry");
+        GeometryModelData[] data = new GeometryModelData[jsonArray.size()];
+        for (int i = 0; i < data.length; i++) {
+            JsonObject object = PinwheelGsonHelper.convertToJsonObject(jsonArray.get(i), "minecraft:geometry[" + i + "]");
 
             // Description
-            GeometryModelData.Description description = parseDescription(entry.getKey().substring(9), object);
+            GeometryModelData.Description description = Geometry1120Parser.parseDescription(PinwheelGsonHelper.getAsJsonObject(object, "description"));
 
             // Cape
             String cape = PinwheelGsonHelper.getAsString(object, "cape", null);
@@ -62,43 +48,28 @@ public final class Geometry180Parser {
                 bones = new GeometryModelData.Bone[0];
             }
 
-            data = new GeometryModelData(description, cape, bones);
+            data[i] = new GeometryModelData(description, cape, bones);
         }
-        return data != null ? new GeometryModelData[]{data} : new GeometryModelData[0];
-    }
-
-    static GeometryModelData.Description parseDescription(String identifier, JsonObject json) throws JsonParseException {
-        float visibleBoundsWidth = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_width", 0);
-        float visibleBoundsHeight = PinwheelGsonHelper.getAsFloat(json, "visible_bounds_height", 0);
-        float[] visibleBoundsOffset = JsonTupleParser.getFloat(json, "visible_bounds_offset", 3, () -> new float[3]);
-        int textureWidth = PinwheelGsonHelper.getAsInt(json, "texturewidth", 256);
-        int textureHeight = PinwheelGsonHelper.getAsInt(json, "textureheight", 256);
-        boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(json, "preserve_model_pose2588", false);
-        if (textureWidth == 0) {
-            throw new JsonSyntaxException("Texture width must not be zero");
-        }
-        if (textureHeight == 0) {
-            throw new JsonSyntaxException("Texture height must not be zero");
-        }
-        return new GeometryModelData.Description(identifier, visibleBoundsWidth, visibleBoundsHeight, new Vector3f(visibleBoundsOffset[0], visibleBoundsOffset[1], visibleBoundsOffset[2]), textureWidth, textureHeight, preserveModelPose2588);
+        return data;
     }
 
     static GeometryModelData.Bone parseBone(JsonObject json) throws JsonParseException {
-        String name = PinwheelGsonHelper.getAsString(json, "name");
-        boolean reset2588 = PinwheelGsonHelper.getAsBoolean(json, "reset", false);
-        boolean neverRender2588 = PinwheelGsonHelper.getAsBoolean(json, "neverrender", false);
-        String parent = PinwheelGsonHelper.getAsString(json, "parent", null);
-        float[] pivot = JsonTupleParser.getFloat(json, "pivot", 3, () -> new float[3]);
-        float[] rotation = JsonTupleParser.getFloat(json, "rotation", 3, () -> new float[3]);
-        float[] bindPoseRotation2588 = JsonTupleParser.getFloat(json, "bind_pose_rotation2588", 3, () -> new float[3]);
-        boolean mirror = PinwheelGsonHelper.getAsBoolean(json, "mirror", false);
-        float inflate = PinwheelGsonHelper.getAsFloat(json, "inflate", 0);
-        boolean debug = PinwheelGsonHelper.getAsBoolean(json, "debug", false);
+        JsonObject boneJson = json.getAsJsonObject();
+        String name = PinwheelGsonHelper.getAsString(boneJson, "name");
+        boolean reset2588 = PinwheelGsonHelper.getAsBoolean(boneJson, "reset2588", false);
+        boolean neverRender2588 = PinwheelGsonHelper.getAsBoolean(boneJson, "neverrender2588", false);
+        String parent = PinwheelGsonHelper.getAsString(boneJson, "parent", null);
+        float[] pivot = JsonTupleParser.getFloat(boneJson, "pivot", 3, () -> new float[3]);
+        float[] rotation = JsonTupleParser.getFloat(boneJson, "rotation", 3, () -> new float[3]);
+        float[] bindPoseRotation2588 = JsonTupleParser.getFloat(boneJson, "bind_pose_rotation2588", 3, () -> new float[3]);
+        boolean mirror = PinwheelGsonHelper.getAsBoolean(boneJson, "mirror", false);
+        float inflate = PinwheelGsonHelper.getAsFloat(boneJson, "inflate", 0);
+        boolean debug = PinwheelGsonHelper.getAsBoolean(boneJson, "debug", false);
 
         GeometryModelData.Cube[] cubes = json.has("cubes") ? parseCubes(json) : new GeometryModelData.Cube[0];
         GeometryModelData.Locator[] locators = json.has("locators") ? Geometry110Parser.parseLocators(json) : new GeometryModelData.Locator[0];
 
-        GeometryModelData.PolyMesh polyMesh = json.has("poly_mesh") ? GSON.fromJson(json.get("poly_mesh"), GeometryModelData.PolyMesh.class) : null;
+        GeometryModelData.PolyMesh polyMesh = boneJson.has("poly_mesh") ? Geometry180Parser.GSON.fromJson(boneJson.get("poly_mesh"), GeometryModelData.PolyMesh.class) : null;
 
         // TODO texture_mesh
 
@@ -136,11 +107,10 @@ public final class Geometry180Parser {
             return new GeometryModelData.CubeUV[6];
         }
 
-        if (cubeJson.get("uv").isJsonArray()) {
-            return Geometry110Parser.parseUV(cubeJson, size);
-        }
         if (cubeJson.get("uv").isJsonObject()) {
             JsonObject uvJson = cubeJson.getAsJsonObject("uv");
+            float[] cubeUV = JsonTupleParser.getFloat(uvJson, "uv", 2, () -> new float[2]);
+
             GeometryModelData.CubeUV[] uvs = new GeometryModelData.CubeUV[6];
             for (FaceDirection direction : FaceDirection.values()) {
                 if (!uvJson.has(direction.getName())) {
@@ -151,10 +121,14 @@ public final class Geometry180Parser {
                 float[] uv = JsonTupleParser.getFloat(faceJson, "uv", 2, null);
                 float[] uvSize = JsonTupleParser.getFloat(faceJson, "uv_size", 2, () -> new float[2]);
                 String material = PinwheelGsonHelper.getAsString(faceJson, "material_instance", "texture");
-                uvs[direction.get3DDataValue()] = new GeometryModelData.CubeUV(uv[0], uv[1], uvSize[0], uvSize[1], GeometryModelData.CubeUVRotation.ROT_0, material);
+                uvs[direction.get3DDataValue()] = new GeometryModelData.CubeUV(cubeUV[0] / size[0] + uv[0], cubeUV[1] / size[1] + uv[1], uvSize[0], uvSize[1], GeometryModelData.CubeUVRotation.ROT_0, material);
             }
             return uvs;
         }
-        throw new JsonSyntaxException("Expected uv to be a JsonArray or JsonObject, was " + PinwheelGsonHelper.getType(cubeJson.get("uv")));
+        throw new JsonSyntaxException("Expected uv to be a JsonObject, was " + PinwheelGsonHelper.getType(cubeJson.get("uv")));
+    }
+
+    static GeometryModelData.CubeUV[] parseBoxUV(JsonObject uvJson, float[] size) {
+        return Geometry110Parser.parseUV(uvJson, size);
     }
 }

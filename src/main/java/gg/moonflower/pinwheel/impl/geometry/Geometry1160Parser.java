@@ -1,6 +1,7 @@
 package gg.moonflower.pinwheel.impl.geometry;
 
 import com.google.gson.*;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.JsonTupleParser;
 import gg.moonflower.pinwheel.api.geometry.GeometryModelData;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
@@ -14,9 +15,9 @@ import java.util.Set;
  * @author Ocelot
  */
 @ApiStatus.Internal
-public final class Geometry1120Parser {
+public final class Geometry1160Parser {
 
-    private Geometry1120Parser() {
+    private Geometry1160Parser() {
     }
 
     public static GeometryModelData[] parseModel(JsonElement json) throws JsonParseException {
@@ -26,7 +27,7 @@ public final class Geometry1120Parser {
             JsonObject object = PinwheelGsonHelper.convertToJsonObject(jsonArray.get(i), "minecraft:geometry[" + i + "]");
 
             // Description
-            GeometryModelData.Description description = parseDescription(PinwheelGsonHelper.getAsJsonObject(object, "description"));
+            GeometryModelData.Description description = Geometry1120Parser.parseDescription(PinwheelGsonHelper.getAsJsonObject(object, "description"));
 
             // Cape
             String cape = PinwheelGsonHelper.getAsString(object, "cape", null);
@@ -52,24 +53,6 @@ public final class Geometry1120Parser {
         return data;
     }
 
-    static GeometryModelData.Description parseDescription(JsonObject json) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
-        String identifier = PinwheelGsonHelper.getAsString(jsonObject, "identifier");
-        float visibleBoundsWidth = PinwheelGsonHelper.getAsFloat(jsonObject, "visible_bounds_width", 0);
-        float visibleBoundsHeight = PinwheelGsonHelper.getAsFloat(jsonObject, "visible_bounds_height", 0);
-        float[] visibleBoundsOffset = JsonTupleParser.getFloat(jsonObject, "visible_bounds_offset", 3, () -> new float[3]);
-        int textureWidth = PinwheelGsonHelper.getAsInt(jsonObject, "texture_width", 256);
-        int textureHeight = PinwheelGsonHelper.getAsInt(jsonObject, "texture_height", 256);
-        boolean preserveModelPose2588 = PinwheelGsonHelper.getAsBoolean(jsonObject, "preserve_model_pose2588", false);
-        if (textureWidth == 0) {
-            throw new JsonSyntaxException("Texture width must not be zero");
-        }
-        if (textureHeight == 0) {
-            throw new JsonSyntaxException("Texture height must not be zero");
-        }
-        return new GeometryModelData.Description(identifier, visibleBoundsWidth, visibleBoundsHeight, new Vector3f(visibleBoundsOffset[0], visibleBoundsOffset[1], visibleBoundsOffset[2]), textureWidth, textureHeight, preserveModelPose2588);
-    }
-
     static GeometryModelData.Bone parseBone(JsonObject json) throws JsonParseException {
         JsonObject boneJson = json.getAsJsonObject();
         String name = PinwheelGsonHelper.getAsString(boneJson, "name");
@@ -85,11 +68,12 @@ public final class Geometry1120Parser {
 
         GeometryModelData.Cube[] cubes = json.has("cubes") ? Geometry180Parser.parseCubes(json) : new GeometryModelData.Cube[0];
         GeometryModelData.Locator[] locators = json.has("locators") ? Geometry110Parser.parseLocators(json) : new GeometryModelData.Locator[0];
+        MolangExpression binding = JsonTupleParser.getExpression(json, "binding", () -> null);
 
         GeometryModelData.PolyMesh polyMesh = boneJson.has("poly_mesh") ? Geometry180Parser.GSON.fromJson(boneJson.get("poly_mesh"), GeometryModelData.PolyMesh.class) : null;
 
         // TODO texture_mesh
 
-        return new GeometryModelData.Bone(name, reset2588, neverRender2588, parent, new Vector3f(pivot[0], pivot[1], pivot[2]), new Vector3f(rotation[0], rotation[1], rotation[2]), new Vector3f(bindPoseRotation2588[0], bindPoseRotation2588[1], bindPoseRotation2588[2]), mirror, inflate, debug, cubes, locators, null, polyMesh);
+        return new GeometryModelData.Bone(name, reset2588, neverRender2588, parent, new Vector3f(pivot[0], pivot[1], pivot[2]), new Vector3f(rotation[0], rotation[1], rotation[2]), new Vector3f(bindPoseRotation2588[0], bindPoseRotation2588[1], bindPoseRotation2588[2]), mirror, inflate, debug, cubes, locators, binding, polyMesh);
     }
 }

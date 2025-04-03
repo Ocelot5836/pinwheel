@@ -1,6 +1,7 @@
 package gg.moonflower.pinwheel.api.geometry;
 
 import com.google.gson.*;
+import gg.moonflower.molangcompiler.api.MolangExpression;
 import gg.moonflower.pinwheel.api.FaceDirection;
 import gg.moonflower.pinwheel.impl.PinwheelGsonHelper;
 import org.jetbrains.annotations.Nullable;
@@ -19,19 +20,20 @@ import java.util.function.Function;
  * @author Ocelot
  * @since 1.0.0
  */
-public record GeometryModelData(Description description, Bone[] bones) {
+public record GeometryModelData(Description description, @Nullable String cape, Bone[] bones) {
 
     /**
      * A completely empty model definition.
      */
-    public static final GeometryModelData EMPTY = new GeometryModelData(new Description("empty", 0, 0, new Vector3f(), 256, 256, false), new Bone[0]);
+    public static final GeometryModelData EMPTY = new GeometryModelData(new Description("empty", 0, 0, new Vector3f(), 256, 256, false), null, new Bone[0]);
 
     @Override
     public String toString() {
         return "BedrockModel{" +
-                "description=" + this.description +
-                ", bones=" + Arrays.toString(this.bones) +
-                '}';
+               "description=" + this.description +
+               "cape=" + this.cape +
+               ", bones=" + Arrays.toString(this.bones) +
+               '}';
     }
 
     /**
@@ -87,14 +89,14 @@ public record GeometryModelData(Description description, Bone[] bones) {
         @Override
         public String toString() {
             return "Description{" +
-                    "identifier='" + this.identifier + '\'' +
-                    ", visibleBoundsWidth=" + this.visibleBoundsWidth +
-                    ", visibleBoundsHeight=" + this.visibleBoundsHeight +
-                    ", visibleBoundsOffset=" + this.visibleBoundsOffset +
-                    ", textureWidth=" + this.textureWidth +
-                    ", textureHeight=" + this.textureHeight +
-                    ", preserveModelPose2588=" + this.preserveModelPose2588 +
-                    '}';
+                   "identifier='" + this.identifier + '\'' +
+                   ", visibleBoundsWidth=" + this.visibleBoundsWidth +
+                   ", visibleBoundsHeight=" + this.visibleBoundsHeight +
+                   ", visibleBoundsOffset=" + this.visibleBoundsOffset +
+                   ", textureWidth=" + this.textureWidth +
+                   ", textureHeight=" + this.textureHeight +
+                   ", preserveModelPose2588=" + this.preserveModelPose2588 +
+                   '}';
         }
     }
 
@@ -109,30 +111,37 @@ public record GeometryModelData(Description description, Bone[] bones) {
      * @param inflate  The amount to grow in all FaceDirections
      * @param cubes    The list of cubes associated with this bone
      * @param locators The list of positions attached to this bone
+     * @param binding  A molang expression specifying the bone name of the parent skeletal hierarchy that this bone should use as the root transform.
+     *                 Without this field it will look for a bone in the parent entity with the same name as this bone.
+     *                 If both are missing, it will assume a local skeletal hierarchy (via the "parent" field).
+     *                 If that is also missing, it will attach to the owning entity's root transform.
      * @param polyMesh The polygon mesh associated with the bone or <code>null</code> if there is no poly mesh for this type
      * @author Ocelot
      * @since 1.0.0
      */
     public record Bone(String name, boolean reset2588, boolean neverRender2588, @Nullable String parent, Vector3f pivot,
                        Vector3f rotation, Vector3f bindPoseRotation2588, boolean mirror, float inflate, boolean debug,
-                       Cube[] cubes, Locator[] locators, @Nullable PolyMesh polyMesh) {
+                       Cube[] cubes, Locator[] locators, @Nullable MolangExpression binding,
+                       @Nullable PolyMesh polyMesh) {
 
         @Override
         public String toString() {
             return "Bone{" +
-                    "name='" + this.name + '\'' +
-                    ", reset2588=" + this.reset2588 +
-                    ", neverRender2588=" + this.neverRender2588 +
-                    ", parent='" + this.parent + '\'' +
-                    ", pivot=" + this.pivot +
-                    ", rotation" + this.rotation +
-                    ", bindPoseRotation2588" + this.bindPoseRotation2588 +
-                    ", mirror=" + this.mirror +
-                    ", inflate=" + this.inflate +
-                    ", debug=" + this.debug +
-                    ", cubes=" + Arrays.toString(this.cubes) +
-                    ", locators=" + Arrays.toString(this.locators) +
-                    '}';
+                   "name='" + this.name + '\'' +
+                   ", reset2588=" + this.reset2588 +
+                   ", neverRender2588=" + this.neverRender2588 +
+                   ", parent='" + this.parent + '\'' +
+                   ", pivot=" + this.pivot +
+                   ", rotation" + this.rotation +
+                   ", bindPoseRotation2588" + this.bindPoseRotation2588 +
+                   ", mirror=" + this.mirror +
+                   ", inflate=" + this.inflate +
+                   ", debug=" + this.debug +
+                   ", cubes=" + Arrays.toString(this.cubes) +
+                   ", locators=" + Arrays.toString(this.locators) +
+                   ", binding=" + this.binding +
+                   ", polyMesh=" + this.polyMesh +
+                   '}';
         }
     }
 
@@ -167,21 +176,21 @@ public record GeometryModelData(Description description, Bone[] bones) {
         @Override
         public String toString() {
             return "Cube{" +
-                    "origin=" + this.origin +
-                    ", size=" + this.size +
-                    ", rotation=" + this.rotation +
-                    ", pivot=" + this.pivot +
-                    ", overrideInflate=" + this.overrideInflate +
-                    ", inflate=" + this.inflate +
-                    ", overrideMirror=" + this.overrideMirror +
-                    ", mirror=" + this.mirror +
-                    ", northUV=" + this.uv(FaceDirection.NORTH) +
-                    ", eastUV=" + this.uv(FaceDirection.EAST) +
-                    ", southUV=" + this.uv(FaceDirection.SOUTH) +
-                    ", westUV=" + this.uv(FaceDirection.WEST) +
-                    ", upUV=" + this.uv(FaceDirection.UP) +
-                    ", downUV=" + this.uv(FaceDirection.DOWN) +
-                    '}';
+                   "origin=" + this.origin +
+                   ", size=" + this.size +
+                   ", rotation=" + this.rotation +
+                   ", pivot=" + this.pivot +
+                   ", overrideInflate=" + this.overrideInflate +
+                   ", inflate=" + this.inflate +
+                   ", overrideMirror=" + this.overrideMirror +
+                   ", mirror=" + this.mirror +
+                   ", northUV=" + this.uv(FaceDirection.NORTH) +
+                   ", eastUV=" + this.uv(FaceDirection.EAST) +
+                   ", southUV=" + this.uv(FaceDirection.SOUTH) +
+                   ", westUV=" + this.uv(FaceDirection.WEST) +
+                   ", upUV=" + this.uv(FaceDirection.UP) +
+                   ", downUV=" + this.uv(FaceDirection.DOWN) +
+                   '}';
         }
     }
 
@@ -192,16 +201,27 @@ public record GeometryModelData(Description description, Bone[] bones) {
      * @author Ocelot
      * @since 1.0.0
      */
-    public record CubeUV(float u, float v, float uSize, float vSize, String materialInstance) {
+    public record CubeUV(float u, float v, float uSize, float vSize, CubeUVRotation rotation, String materialInstance) {
 
         @Override
         public String toString() {
             return "CubeUV{" +
-                    "uv=(" + this.u + "," + this.v + ")" +
-                    ", uvSize=(" + this.uSize + "," + this.vSize + ")" +
-                    ", materialInstance='" + this.materialInstance + '\'' +
-                    '}';
+                   "uv=(" + this.u + "," + this.v + ")" +
+                   ", uvSize=(" + this.uSize + "," + this.vSize + ")" +
+                   ", rotation=" + this.rotation +
+                   ", materialInstance='" + this.materialInstance + '\'' +
+                   '}';
         }
+    }
+
+    /**
+     * Possible UV rotations.
+     *
+     * @author ocelot
+     * @since 1.3.0
+     */
+    public enum CubeUVRotation {
+        ROT_0, ROT_90, ROT_180, ROT_270
     }
 
     /**
@@ -217,13 +237,13 @@ public record GeometryModelData(Description description, Bone[] bones) {
         @Override
         public String toString() {
             return "PolyMesh{" +
-                    "normalizedUvs=" + this.normalizedUvs +
-                    ", positions=" + Arrays.toString(this.positions) +
-                    ", normals=" + Arrays.toString(this.normals) +
-                    ", uvs=" + Arrays.toString(this.uvs) +
-                    ", polys=" + Arrays.toString(this.polys) +
-                    ", polyType=" + this.polyType +
-                    '}';
+                   "normalizedUvs=" + this.normalizedUvs +
+                   ", positions=" + Arrays.toString(this.positions) +
+                   ", normals=" + Arrays.toString(this.normals) +
+                   ", uvs=" + Arrays.toString(this.uvs) +
+                   ", polys=" + Arrays.toString(this.polys) +
+                   ", polyType=" + this.polyType +
+                   '}';
         }
 
         public static class Deserializer implements JsonDeserializer<PolyMesh> {
@@ -232,10 +252,11 @@ public record GeometryModelData(Description description, Bone[] bones) {
                 if (!json.isJsonPrimitive()) {
                     throw new JsonSyntaxException("Expected String, was " + PinwheelGsonHelper.getType(json));
                 }
-                for (PolyType polyType : PolyType.values())
+                for (PolyType polyType : PolyType.values()) {
                     if (polyType.name.equalsIgnoreCase(json.getAsString())) {
                         return polyType;
                     }
+                }
                 throw new JsonSyntaxException("Unsupported poly type: " + json.getAsString() + ". Supported poly types: " + Arrays.toString(Arrays.stream(PolyType.values()).map(PolyType::getName).toArray(String[]::new)));
             }
 
@@ -319,10 +340,10 @@ public record GeometryModelData(Description description, Bone[] bones) {
         @Override
         public String toString() {
             return "Poly{" +
-                    "positions=" + Arrays.toString(positions) +
-                    ", normals=" + Arrays.toString(normals) +
-                    ", uvs=" + Arrays.toString(uvs) +
-                    '}';
+                   "positions=" + Arrays.toString(positions) +
+                   ", normals=" + Arrays.toString(normals) +
+                   ", uvs=" + Arrays.toString(uvs) +
+                   '}';
         }
 
         public static class Deserializer implements JsonDeserializer<Polygon> {
@@ -368,9 +389,9 @@ public record GeometryModelData(Description description, Bone[] bones) {
         @Override
         public String toString() {
             return "Locator{" +
-                    "identifier='" + this.identifier + '\'' +
-                    ", position=" + this.position +
-                    '}';
+                   "identifier='" + this.identifier + '\'' +
+                   ", position=" + this.position +
+                   '}';
         }
     }
 }
