@@ -25,14 +25,9 @@ public interface AnimationController {
     MolangEnvironment getEnvironment();
 
     /**
-     * @return All custom variables for animation
-     */
-    AnimationVariableStorage getVariables();
-
-    /**
      * @return All animations playing in this controller
      */
-    Collection<PlayingAnimation> getPlayingAnimations();
+    Collection<? extends PlayingAnimation> getPlayingAnimations();
 
     /**
      * @return Whether no animations are currently playing

@@ -43,7 +43,7 @@ public interface GeometryModel extends GeometryTree {
         }
 
         @Override
-        public void applyAnimations(MolangEnvironment environment, Collection<PlayingAnimation> animations) {
+        public void applyAnimations(MolangEnvironment environment, Collection<? extends PlayingAnimation> animations) {
         }
 
         @Override
@@ -126,7 +126,7 @@ public interface GeometryModel extends GeometryTree {
      *                    This is generally going to be {@link MolangRuntime#runtime()}
      * @param animations  The animations to play
      */
-    default void applyAnimations(MolangEnvironment environment, Collection<PlayingAnimation> animations) {
+    default void applyAnimations(MolangEnvironment environment, Collection<? extends PlayingAnimation> animations) {
         this.resetTransformation();
 
         for (PlayingAnimation animation : animations) {
