@@ -107,6 +107,9 @@ public final class Geometry1210Parser {
             return new GeometryModelData.CubeUV[6];
         }
 
+        if (cubeJson.get("uv").isJsonArray()) {
+            return Geometry110Parser.parseUV(cubeJson, size);
+        }
         if (cubeJson.get("uv").isJsonObject()) {
             JsonObject uvJson = cubeJson.getAsJsonObject("uv");
             float[] cubeUV = JsonTupleParser.getFloat(uvJson, "uv", 2, () -> new float[2]);
